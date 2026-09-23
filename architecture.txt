@@ -1,0 +1,234 @@
+SIH 26035 – NAWI TESTING & COMPLIANCE SYSTEM
+SYSTEM ARCHITECTURE
+
+                         ┌──────────────────────────┐
+                         │        USERS             │
+                         │                          │
+                         │  Tester | Reviewer       │
+                         │  Admin                   │
+                         └────────────┬─────────────┘
+                                      │
+                                      ▼
+                         ┌──────────────────────────┐
+                         │      WEB APPLICATION     │
+                         │        (Frontend)        │
+                         │                          │
+                         │  Login & Authentication  │
+                         │  Dashboard               │
+                         │  Instrument Management   │
+                         │  Evaluation Management   │
+                         │  Testing Workspace       │
+                         │  Review & Approval       │
+                         │  Reports & History       │
+                         └────────────┬─────────────┘
+                                      │
+                                      ▼
+                         ┌──────────────────────────┐
+                         │       BACKEND API        │
+                         │                          │
+                         │  User Management         │
+                         │  Instrument Management   │
+                         │  Evaluation Management   │
+                         │  Test Data Processing    │
+                         │  Validation              │
+                         │  Report Management       │
+                         │  Search & History        │
+                         └────────────┬─────────────┘
+                                      │
+                    ┌─────────────────┼─────────────────┐
+                    │                 │                 │
+                    ▼                 ▼                 ▼
+          ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+          │  OIML R-76     │ │  CALCULATION   │ │   WORKFLOW     │
+          │  RULE ENGINE   │ │     ENGINE     │ │    ENGINE      │
+          │                │ │                │ │                │
+          │ Classification │ │ Error          │ │ Draft          │
+          │ MPE Rules      │ │ Calculations   │ │ In Progress    │
+          │ Test Rules     │ │ Permissible    │ │ Submitted      │
+          │ Compliance     │ │ Error          │ │ Under Review   │
+          │ Criteria       │ │ PASS / FAIL    │ │ Approved       │
+          └───────┬────────┘ └───────┬────────┘ │ Correction     │
+                  │                  │          └───────┬────────┘
+                  └──────────────────┼──────────────────┘
+                                     │
+                                     ▼
+                         ┌──────────────────────────┐
+                         │       DATABASE           │
+                         │                          │
+                         │ Users                    │
+                         │ Instruments              │
+                         │ Evaluations              │
+                         │ Test Observations        │
+                         │ Calculations              │
+                         │ Test Results             │
+                         │ Reports                  │
+                         │ Audit History            │
+                         └────────────┬─────────────┘
+                                      │
+                         ┌────────────┴────────────┐
+                         ▼                         ▼
+              ┌───────────────────┐     ┌───────────────────┐
+              │  FILE / DOCUMENT  │     │ REPORT GENERATOR  │
+              │     STORAGE       │     │                   │
+              │                   │     │ Standardized      │
+              │ Photos            │     │ Test Report       │
+              │ Certificates      │     │ PDF Generation    │
+              │ Supporting Docs   │     │ Report Preview    │
+              └───────────────────┘     └─────────┬─────────┘
+                                                  │
+                                                  ▼
+                                      ┌──────────────────────┐
+                                      │ REPORT REPOSITORY    │
+                                      │                      │
+                                      │ Search               │
+                                      │ Filter               │
+                                      │ Download             │
+                                      │ Instrument History   │
+                                      └──────────────────────┘
+
+
+CORE DATA FLOW
+
+Instrument Registration
+        ↓
+Create Evaluation
+        ↓
+Enter Laboratory & Environmental Conditions
+        ↓
+Select Applicable OIML R-76 Tests
+        ↓
+Enter Test Observations
+        ↓
+Validate Input
+        ↓
+Apply OIML R-76 Rules
+        ↓
+Perform Automatic Calculations
+        ↓
+Determine Test-wise PASS / FAIL
+        ↓
+Generate Overall Compliance Result
+        ↓
+Tester Submits Evaluation
+        ↓
+Reviewer Reviews
+        ↓
+Approve / Correction Required
+        ↓
+Generate Standardized Report
+        ↓
+Store Report
+        ↓
+Search / Download / Instrument History
+
+
+MAIN ARCHITECTURE LAYERS
+
+1. PRESENTATION LAYER
+   - Login
+   - Dashboard
+   - Forms
+   - Testing Workspace
+   - Results
+   - Review
+   - Reports
+   - History
+
+2. APPLICATION / API LAYER
+   - Authentication
+   - User & Role Management
+   - Instrument Management
+   - Evaluation Management
+   - Test Management
+   - Workflow Management
+   - Report Management
+
+3. COMPLIANCE & CALCULATION LAYER
+   - OIML R-76 Rule Engine
+   - Instrument Classification
+   - MPE Calculation
+   - Error Calculation
+   - Compliance Checking
+   - PASS / FAIL Generation
+
+4. DATA LAYER
+   - User Database
+   - Instrument Database
+   - Evaluation Database
+   - Test Results
+   - Reports
+   - Audit Logs
+
+5. FILE & REPORT LAYER
+   - Evidence Upload
+   - Document Storage
+   - Report Generation
+   - PDF Export
+   - Report Repository
+
+
+TECHNOLOGY STACK
+
+Frontend:
+- React.js
+- HTML
+- CSS
+- JavaScript
+
+Backend:
+- Node.js
+- Express.js
+
+Database:
+- MongoDB
+
+Authentication:
+- JWT / Role-Based Authentication
+
+Report Generation:
+- PDF Generation Library
+
+File Storage:
+- Local Storage for Prototype
+- Cloud/Object Storage for Future Deployment
+
+Deployment:
+- Frontend: Vercel / similar
+- Backend: Render / similar
+- Database: MongoDB Atlas
+
+
+IMPORTANT DESIGN PRINCIPLE
+
+The system does NOT directly weigh the instrument.
+
+Physical Instrument
+        ↓
+Human Tester performs test
+        ↓
+Tester enters observations
+        ↓
+Software validates data
+        ↓
+OIML R-76 Rule Engine
+        ↓
+Calculation Engine
+        ↓
+Compliance Result
+        ↓
+PASS / FAIL
+        ↓
+Standardized Report
+
+
+FUTURE EXTENSIONS
+
+- Digital Signature
+- Cloud Deployment
+- Advanced Audit Trail
+- OIML Rule Version Management
+- Multiple Laboratory Support
+- Automated Notifications
+- Integration with Laboratory Equipment
+- Mobile Application
+- Government Department Integration

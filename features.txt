@@ -1,0 +1,429 @@
+SIH 26035 — COMPLETE PROTOTYPE FEATURE LIST
+1. Authentication & User Roles
+Login / Logout
+Username / Email
+Password
+Role-based access
+Tester
+Create tests
+Enter observations
+Upload evidence
+Submit tests
+Reviewer
+Review test data
+Review calculations
+Check results
+Approve / Reject / Request correction
+Admin
+Manage users
+Manage laboratories
+View all tests and reports
+Manage system/rules
+2. Dashboard
+Total instruments tested
+Tests in progress
+Completed tests
+Pending reviews
+Passed tests
+Failed tests
+Reports generated
+Recent tests
+Recent reports
+Recent activity
+Test status
+Quick actions:
+New Test
+View Tests
+Reports
+Search
+Users
+3. Instrument Registration
+Manufacturer Details
+Manufacturer/company name
+Manufacturer address
+Manufacturer contact details
+Applicant details
+Instrument Details
+Instrument type
+Model
+Serial number
+Maximum capacity
+Minimum capacity
+Accuracy class
+Verification scale interval
+Other technical specifications
+Identification
+Test/Application ID
+Submission date
+Instrument photographs
+4. Test Creation
+Create new test/evaluation
+Generate Test ID
+Link test to instrument
+Assign tester
+Assign reviewer
+Test status
+Test date
+5. Laboratory Information
+Laboratory name
+Laboratory ID
+Laboratory location
+Tester
+Reviewer
+Test date
+Test time
+Reference equipment/standards
+Other relevant laboratory information
+6. Environmental / Test Conditions
+Temperature
+Humidity
+Atmospheric/environmental conditions
+Test location
+Other applicable test conditions
+7. Test Modules
+
+Separate modules for applicable OIML R-76 tests.
+
+Weighing Performance Test
+Test load
+Instrument indication
+Relevant observations
+Automatic calculation
+Compliance result
+Repeatability Test
+Test load
+Multiple readings
+Automatic calculation
+Compliance result
+Eccentric Loading Test
+Different load positions
+Observed readings
+Automatic calculation
+Compliance result
+Other Applicable Tests
+Additional OIML R-76 tests
+Test-specific inputs
+Test-specific calculations
+Test-specific compliance result
+8. Test Observation Entry
+Test-specific input fields
+Measurement/load values
+Observed readings
+Repeated observations
+Test conditions
+Notes/comments
+Save observations
+Edit observations
+9. Automatic Calculations
+Calculate relevant measurement/error values
+Calculate permissible error
+Calculate other required values
+Apply applicable OIML requirements
+Calculate compliance
+Generate test result automatically
+
+Flow:
+
+INPUT → CALCULATION → OIML REQUIREMENT → COMPLIANCE → RESULT
+
+10. OIML R-76 Rule Engine
+Apply OIML R-76 requirements
+Identify applicable rules
+Consider instrument classification
+Consider technical parameters
+Consider applicable test
+Consider applicable load/range
+Determine applicable permissible error
+Apply compliance criteria
+11. Automatic PASS / FAIL
+Automatically determine test result
+PASS when requirements are satisfied
+FAIL when requirements are not satisfied
+Display reason/result
+Determine overall compliance according to applicable rules
+12. Input Validation
+Required field validation
+Number validation
+Format validation
+Range validation
+Missing observation detection
+Invalid value detection
+Inconsistent data detection
+Warning/error messages
+13. Test Results Page
+List all tests
+Test-wise PASS/FAIL
+Calculated values
+Applicable limits
+Observations
+Notes
+Evidence
+Overall status
+14. Evidence & Attachments
+Photos
+Instrument photo
+Test setup photo
+Test condition photo
+Other relevant photographs
+Documents
+Supporting documents
+Certificates
+Test-related documents
+Other relevant attachments
+15. Test Summary
+
+Display before final submission:
+
+Instrument details
+Test details
+All test results
+PASS/FAIL count
+Observations
+Calculations
+Compliance results
+Evidence
+Overall status
+Reviewer information
+16. Review Workflow
+
+Tester → Submit → Reviewer → Review
+
+Reviewer can:
+
+View instrument details
+View observations
+View calculations
+View PASS/FAIL
+View attachments
+Add comments
+Approve
+Reject
+Request correction
+17. Automatic Report Generation
+
+Generate standardized report automatically.
+
+Report should contain:
+
+Manufacturer information
+Instrument information
+Model
+Serial number
+Technical specifications
+Laboratory information
+Environmental conditions
+Test information
+Test observations
+Calculations
+Compliance results
+PASS/FAIL results
+Photographs
+Supporting documents
+Reviewer/authorization information
+Final status
+18. Report Export
+PDF export
+Editable report export
+Word/DOCX-compatible report
+19. Report Repository
+Store all generated reports
+Store test records
+Store associated evidence
+Organize reports
+View/download reports
+20. Search & Filters
+
+Search by:
+
+Test ID
+Manufacturer
+Model
+Serial number
+Instrument type
+Date
+Status
+Tester
+Laboratory
+
+Filters:
+
+In Progress
+Under Review
+Completed
+Failed
+21. Instrument History
+
+For every instrument:
+
+Previous evaluations
+Previous test results
+Previous reports
+Test dates
+Test status
+Complete testing history
+
+Example:
+
+ABC-100
+
+Evaluation 001 → Report
+Evaluation 002 → Report
+Evaluation 003 → Report
+22. Monitoring Dashboard
+
+Monitor:
+
+Tests in progress
+Completed tests
+Pending reviews
+Failed tests
+Reports generated
+Testing activity
+Historical activity
+23. Test Status Management
+
+Possible statuses:
+
+Draft → In Progress → Submitted → Under Review → Correction Required → Approved / Completed
+
+24. User Management
+
+Admin can:
+
+Add users
+Deactivate users
+Assign roles
+Assign laboratory
+View users
+Manage permissions
+25. Notifications
+Test submitted
+Review pending
+Correction requested
+Report approved
+Report generated
+26. Comments / Remarks
+Test remarks
+Reviewer comments
+Correction notes
+General observations
+27. Security / Audit Trail
+
+Track:
+
+Who created the test
+Who modified the test
+Who reviewed the test
+Who finalized the test
+Date/time of actions
+Changes made
+
+Example:
+
+10:31 AM — Test created — Tester A
+11:45 AM — Test submitted — Tester A
+01:20 PM — Reviewed — Reviewer B
+01:35 PM — Approved — Reviewer B
+
+28. OIML Rule Update System
+Store applicable OIML rules
+Rule version
+Current version
+Previous versions
+Update applicable requirements
+Update calculations when standards change
+Avoid permanently hard-coding all requirements
+29. Rule / Calculation Reference
+
+For each calculation:
+
+Applicable standard
+Applicable requirement
+Calculation used
+Input values
+Result
+Compliance status
+30. Digital Signature — OPTIONAL
+Reviewer signature
+Authorized officer signature
+Digital approval
+31. Documentation
+
+Project documentation should include:
+
+Software architecture
+Calculation methodology
+OIML rule implementation
+User workflow
+Deployment framework
+System setup/instructions
+FEATURE PRIORITY
+MUST WORK
+Login / Roles
+Dashboard
+Instrument Registration
+Instrument Details
+Laboratory Details
+Environmental/Test Conditions
+Create Test
+Test Observation Entry
+OIML-based Calculations
+Automatic Compliance Checking
+Automatic PASS/FAIL
+Input Validation
+Test Summary
+Report Generation
+PDF Export
+Editable Report Export
+Report Repository
+Search / Retrieval
+Instrument-wise Test History
+SHOULD HAVE
+Reviewer Workflow
+Attachments / Photos
+Test Status Tracking
+User Management
+Dashboard Analytics
+Comments / Remarks
+Audit Trail
+CAN HAVE
+Notifications
+Digital Signatures
+Advanced OIML Rule Management
+Advanced Analytics
+Advanced Report Customization
+CORE PROTOTYPE FLOW
+
+LOGIN
+↓
+DASHBOARD
+↓
+CREATE NEW INSTRUMENT
+↓
+ENTER INSTRUMENT DETAILS
+↓
+ENTER LABORATORY DETAILS
+↓
+CREATE TEST
+↓
+ENTER TEST OBSERVATIONS
+↓
+AUTOMATIC CALCULATION
+↓
+OIML COMPLIANCE CHECK
+↓
+PASS / FAIL
+↓
+TEST SUMMARY
+↓
+SUBMIT FOR REVIEW
+↓
+GENERATE STANDARDIZED REPORT
+↓
+PDF / EDITABLE REPORT
+↓
+SAVE TO REPOSITORY
+↓
+SEARCH REPORT
+↓
+VIEW COMPLETE INSTRUMENT HISTORY

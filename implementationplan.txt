@@ -1,0 +1,778 @@
+SIH 26035 — FAST PROTOTYPE IMPLEMENTATION PLAN
+🎯 PRIMARY GOAL
+
+Build a complete, polished prototype UI for the entire system.
+
+Then make this core demo flow functional:
+
+LOGIN
+  ↓
+DASHBOARD
+  ↓
+INSTRUMENT
+  ↓
+CREATE EVALUATION
+  ↓
+ENTER TEST DATA
+  ↓
+AUTOMATIC CALCULATION
+  ↓
+OIML COMPLIANCE
+  ↓
+PASS / FAIL
+  ↓
+REVIEW
+  ↓
+GENERATE REPORT
+  ↓
+REPORT REPOSITORY
+  ↓
+SEARCH / HISTORY
+
+Everything outside this core flow can initially be UI/prototype-level.
+
+PHASE 1 — FREEZE THE PRODUCT STRUCTURE
+
+Before coding, freeze these pages.
+
+Authentication
+Login
+Main
+Dashboard
+Instruments
+Instruments List
+New Instrument
+Instrument Details
+Instrument History
+Evaluation
+New Evaluation
+Testing Workspace
+Weighing Performance
+Repeatability
+Eccentric Loading
+Other Tests
+Test Results
+Test Summary
+Review
+Reviewer Dashboard
+Review Evaluation
+Reports
+Report Preview
+Reports Repository
+Administration
+Users
+OIML Rules
+Settings
+
+These 21 screens form the complete UI skeleton.
+
+Do not keep adding random pages after this unless the PS genuinely requires them.
+
+PHASE 2 — BUILD ALL UI FIRST
+Step 1 — Global design system
+
+Before individual pages:
+
+Navbar
+Sidebar
+Page header
+Buttons
+Input fields
+Dropdowns
+Tables
+Cards
+Status badges
+Modals
+Alerts
+Empty states
+Loading states
+Visual direction
+
+The application should feel like:
+
+Government / Legal Metrology / Laboratory software
+
+Not:
+
+flashy AI startup dashboard.
+
+Use:
+
+Professional colors
+Clean typography
+Lots of structured information
+Tables
+Clear status indicators
+Consistent spacing
+PHASE 3 — BUILD THE 21 UI SCREENS
+1. LOGIN
+
+UI only initially.
+
+Include:
+
+Logo
+System name
+Username/email
+Password
+Login
+Demo role selection if useful
+
+Later connect it to simple demo authentication.
+
+2. DASHBOARD
+
+Show:
+
+Total evaluations
+In-progress
+Pending review
+Completed
+Passed
+Failed
+Recent evaluations
+Recent reports
+Quick actions
+
+Make this polished because it will likely appear in the video/PPT.
+
+3. INSTRUMENTS LIST
+
+Table:
+
+Instrument ID
+Manufacturer
+Model
+Serial number
+Capacity
+Class
+Last evaluation
+Status
+Actions
+
+Buttons:
+
+View
+History
+New Evaluation
+4. NEW INSTRUMENT
+
+Form:
+
+Manufacturer
+Name
+Address
+Contact
+Instrument
+Type
+Model
+Serial number
+Min capacity
+Max capacity
+Accuracy class
+Verification scale interval
+Specifications
+Evidence
+Instrument photo
+Supporting document
+
+Button:
+
+Register Instrument
+
+5. INSTRUMENT DETAILS
+
+Show:
+
+Instrument information
+Manufacturer
+Technical details
+Current status
+Photos
+
+Then:
+
+Evaluation History
+
+Previous evaluations.
+
+Buttons:
+
+Start Evaluation
+View Report
+View History
+PHASE 4 — BUILD THE EVALUATION UI
+6. NEW EVALUATION
+
+Fields:
+
+Test ID
+Instrument
+Tester
+Reviewer
+Laboratory
+Date
+Temperature
+Humidity
+Other conditions
+
+Button:
+
+Start Evaluation
+
+7. TESTING WORKSPACE ⭐
+
+This is one of your most important screens.
+
+Structure:
+
+Evaluation: NAWI-2026-001
+Instrument: ABC-100
+
+Progress:
+✓ Instrument
+✓ Conditions
+● Testing
+○ Review
+○ Report
+
+Then test list:
+
+✓ Weighing Performance
+✓ Repeatability
+● Eccentric Loading
+○ Other Tests
+
+This becomes the central workspace.
+
+8. WEIGHING PERFORMANCE
+
+Create a proper test interface.
+
+Example:
+
+Test Load	Observed Reading	Error	Permissible Error	Result
+10 kg	10.01 kg	Auto	Auto	PASS
+20 kg	20.03 kg	Auto	Auto	PASS
+40 kg	40.02 kg	Auto	Auto	PASS
+60 kg	60.05 kg	Auto	Auto	PASS
+100 kg	100.08 kg	Auto	Auto	PASS
+
+Initially:
+
+Inputs are real.
+
+Calculated fields can be connected later.
+
+9. REPEATABILITY
+
+UI:
+
+Test Load: 20 kg
+
+Reading 1: ______
+Reading 2: ______
+Reading 3: ______
+Reading 4: ______
+Reading 5: ______
+
+Then:
+
+Calculated Result
+Compliance
+PASS
+10. ECCENTRIC LOADING
+
+Make this visually strong.
+
+Show a scale/platform diagram.
+
+       FRONT
+
+     [  1  ]
+
+ [ 2 ]     [ 3 ]
+
+     [  4  ]
+
+       BACK
+
+For each position:
+
+Load
+Reading
+Error
+Result
+11. OTHER TESTS
+
+Show a structured list of additional applicable tests.
+
+You don't need to fully implement every test for the prototype.
+
+The UI should communicate:
+
+The system supports the complete applicable testing workflow.
+
+PHASE 5 — RESULTS
+12. TEST RESULTS
+
+Show:
+
+Weighing Performance       PASS
+Repeatability              PASS
+Eccentric Loading          PASS
+Other Tests                PASS
+
+Also show:
+
+Calculated values
+Applicable requirement
+Evidence
+Remarks
+13. TEST SUMMARY
+
+One final overview:
+
+Instrument
+Laboratory
+Test Conditions
+
+Tests Completed: 4/4
+
+PASS: 4
+FAIL: 0
+
+Evidence:
+3 Photos
+1 Document
+
+Buttons:
+
+Save Draft
+Submit for Review
+PHASE 6 — REVIEW UI
+14. REVIEWER DASHBOARD
+
+Show:
+
+Pending reviews
+Completed reviews
+Corrections requested
+
+Table:
+
+Test ID
+Instrument
+Tester
+Submitted
+Status
+Action
+15. REVIEW EVALUATION
+
+Reviewer sees everything:
+
+Instrument details
+Test observations
+Calculations
+Compliance
+Evidence
+Remarks
+
+Buttons:
+
+APPROVE
+REQUEST CORRECTION
+REJECT
+PHASE 7 — REPORT UI
+16. REPORT PREVIEW ⭐
+
+Make this look like a genuine official report.
+
+Sections:
+
+Report number
+Manufacturer
+Instrument
+Model
+Serial number
+Technical specifications
+Laboratory
+Environmental conditions
+Test results
+Calculations
+Compliance
+Evidence
+Final status
+Reviewer
+
+Buttons:
+
+Download PDF
+Download Editable Report
+17. REPORT REPOSITORY
+
+Table:
+
+Report ID
+Instrument
+Manufacturer
+Model
+Date
+Result
+Status
+
+Actions:
+
+View
+Download
+History
+PHASE 8 — HISTORY
+18. INSTRUMENT HISTORY
+
+Example:
+
+ABC-100
+
+2026-09-23
+NAWI-001
+COMPLETED
+PASS
+
+2026-08-12
+NAWI-002
+COMPLETED
+PASS
+
+2026-06-15
+NAWI-003
+COMPLETED
+FAIL
+
+This is a good feature to demonstrate the repository/history requirement.
+
+PHASE 9 — SUPPORTING UI
+19. USERS
+
+Show:
+
+Users
+Roles
+Laboratory
+Status
+
+Basic admin UI.
+
+No need to spend much time making advanced user management functional.
+
+20. OIML RULES
+
+Show:
+
+OIML R-76
+Current Version
+Status: Active
+
+Applicable Test Rules
+
+Weighing Performance
+Repeatability
+Eccentric Loading
+...
+
+Also show:
+
+Last Updated
+
+This communicates the future-update capability.
+
+You don't need a sophisticated rule-management system for the first prototype.
+
+21. SETTINGS
+
+Include:
+
+Profile
+Laboratory
+Report settings
+System information
+
+This can remain mostly UI.
+
+PHASE 10 — NOW MAKE ONLY THE CORE FUNCTIONAL
+
+Once all UI screens exist, stop adding UI.
+
+Now connect the important workflow.
+
+Functional Priority 1 — Instrument
+
+Make these actually work:
+
+New Instrument
+     ↓
+Save
+     ↓
+Instrument List
+     ↓
+Instrument Details
+Functional Priority 2 — Evaluation
+Instrument
+     ↓
+New Evaluation
+     ↓
+Test ID generated
+     ↓
+Evaluation created
+Functional Priority 3 — Test Data
+
+Make at least your demo tests actually accept data.
+
+For example:
+
+Weighing Performance
+
+Tester enters:
+
+Load = 20 kg
+Reading = 20.03 kg
+
+The application processes it.
+
+PHASE 11 — IMPLEMENT ONLY THE DEMO CALCULATIONS
+
+This is extremely important.
+
+Don't spend the deadline implementing every possible OIML calculation.
+
+Instead:
+
+Identify the tests you're going to show in the video.
+
+Then make those calculations genuinely functional and based on the applicable OIML requirements.
+
+For example:
+
+Input
+ ↓
+Calculate error
+ ↓
+Determine applicable limit
+ ↓
+Compare
+ ↓
+PASS / FAIL
+
+The remaining test modules can exist as UI until you have time to implement them.
+
+Do not fabricate OIML formulas just to make the prototype work.
+
+PHASE 12 — MAKE PASS/FAIL REAL
+
+This should be functional.
+
+The system should derive:
+
+OBSERVATION
+      ↓
+CALCULATION
+      ↓
+APPLICABLE OIML REQUIREMENT
+      ↓
+COMPARISON
+      ↓
+PASS / FAIL
+
+Not:
+
+Button clicked → PASS
+PHASE 13 — REPORT GENERATION
+
+This should be genuinely functional.
+
+Take the data entered during the test and populate the report.
+
+Database
+   ↓
+Instrument Data
+Test Data
+Results
+Calculations
+Evidence
+   ↓
+Report Template
+   ↓
+PDF
+
+This is worth spending time on because report generation is central to the PS and will look strong in the video.
+
+PHASE 14 — REVIEW
+
+Implement a simple real workflow:
+
+Tester
+ ↓
+Submit
+ ↓
+Reviewer Dashboard
+ ↓
+Open Evaluation
+ ↓
+Approve
+ ↓
+Completed
+
+You don't need an elaborate approval system.
+
+PHASE 15 — REPOSITORY
+
+Make this genuinely work:
+
+Generate Report
+      ↓
+Save
+      ↓
+Reports Repository
+      ↓
+Search
+      ↓
+Open Report
+PHASE 16 — HISTORY
+
+Make:
+
+Instrument
+ ↓
+History
+ ↓
+Previous evaluations
+ ↓
+Previous reports
+
+actually retrieve the records.
+
+This demonstrates another important PS requirement.
+
+PHASE 17 — EVERYTHING ELSE
+
+Once the core works, add functionality only if time remains.
+
+Optional functional features
+Real authentication
+Notifications
+Audit logs
+Advanced user management
+Advanced OIML rule management
+Digital signatures
+Advanced analytics
+
+Don't let these delay the core demo.
+
+WHAT YOU SHOULD NOT SPEND TIME ON NOW
+
+Avoid getting stuck building:
+
+❌ Production-grade security infrastructure
+❌ Complex cloud architecture
+❌ Real hardware integration
+❌ IoT integration
+❌ AI/ML
+❌ Real-time weighing-machine communication
+❌ Fully automated physical testing
+❌ Every possible OIML test
+❌ Enterprise-grade rule management
+❌ Complex notification infrastructure
+❌ Advanced analytics
+
+None of these are necessary to demonstrate the core concept of your PS.
+
+FINAL PRIORITY MAP
+🔴 BUILD UI — EVERYTHING
+Login
+Dashboard
+Instruments
+New Instrument
+Instrument Details
+New Evaluation
+Testing Workspace
+Weighing Performance
+Repeatability
+Eccentric Loading
+Other Tests
+Test Results
+Test Summary
+Reviewer Dashboard
+Review Page
+Report Preview
+Report Repository
+Instrument History
+Users
+OIML Rules
+Settings
+🔴 MAKE FUNCTIONAL — CORE
+Instrument creation
+Evaluation creation
+Test data entry
+Demo calculations
+OIML compliance check
+PASS/FAIL
+Test submission
+Reviewer approval
+Report generation
+PDF
+Report storage
+Search
+Instrument history
+🟡 UI ONLY / LIGHT MOCKING IS OK
+Advanced dashboard analytics
+Notifications
+Advanced user management
+OIML rule administration
+Audit trail
+Digital signatures
+Advanced settings
+Additional test modules
+🎥 YOUR FINAL WORKING VIDEO
+
+The entire development should ultimately support this single story:
+
+LOGIN
+  ↓
+DASHBOARD
+  ↓
+SELECT ABC-100
+  ↓
+CREATE EVALUATION
+  ↓
+ENTER LAB CONDITIONS
+  ↓
+PERFORM / ENTER TEST OBSERVATIONS
+  ↓
+AUTOMATIC OIML CALCULATION
+  ↓
+PASS / FAIL
+  ↓
+COMPLETE TESTS
+  ↓
+SUBMIT
+  ↓
+REVIEWER APPROVES
+  ↓
+GENERATE REPORT
+  ↓
+DOWNLOAD PDF
+  ↓
+REPORT SAVED
+  ↓
+SEARCH ABC-100
+  ↓
+SHOW COMPLETE HISTORY
+
+If this flow works smoothly and the rest of the application looks complete, you have a strong prototype foundation.
+
+So our immediate goal is not "build the entire software."
+
+It is:
+
+Build the entire UI → make one convincing end-to-end workflow genuinely work → polish the demo → prepare PPT/video.
+
+That is the fastest way to use the remaining time effectively.
