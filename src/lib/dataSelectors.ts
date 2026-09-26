@@ -51,8 +51,8 @@ export function getWorkload(data: AppData, laboratory?: string) {
 export function getReports(data: AppData) {
   return data.evaluations.map((evaluation) => {
     const measurements = getEvaluationMeasurements(data, evaluation.id)
-    const repeatabilityReadings = measurements.repeatability.map((row) => Number(row.reading.match(/^[-+]?\d*\.?\d+/)?.[0])).filter(Number.isFinite)
-    const repeatabilityMpe = Number(measurements.repeatabilityMpe.match(/^[-+]?\d*\.?\d+/)?.[0])
+    const repeatabilityReadings = measurements.repeatability.map((row) => Number(String(row.reading ?? '').match(/^[-+]?\d*\.?\d+/)?.[0])).filter(Number.isFinite)
+    const repeatabilityMpe = Number(String(measurements.repeatabilityMpe ?? '').match(/^[-+]?\d*\.?\d+/)?.[0])
     const repeatabilityFail = repeatabilityReadings.length === measurements.repeatability.length && Number.isFinite(repeatabilityMpe)
       && Math.max(...repeatabilityReadings) - Math.min(...repeatabilityReadings) > repeatabilityMpe
     const complete = measurements.weighing.every((row) => row.result !== 'NOT TESTED')

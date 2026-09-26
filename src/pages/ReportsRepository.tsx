@@ -19,9 +19,9 @@ export function ReportsRepository() {
       .filter(
         (r) =>
           !query ||
-          r.reportId.toLowerCase().includes(query.toLowerCase()) ||
-          r.instrument.toLowerCase().includes(query.toLowerCase()) ||
-          r.serial.toLowerCase().includes(query.toLowerCase()),
+          String(r.reportId ?? '').toLowerCase().includes(query.toLowerCase()) ||
+          String(r.instrument ?? '').toLowerCase().includes(query.toLowerCase()) ||
+          String(r.serial ?? '').toLowerCase().includes(query.toLowerCase()),
       )
   }, [reportsList, query, result])
 
@@ -38,7 +38,7 @@ export function ReportsRepository() {
           />
         </div>
         <SelectInput value={result} onChange={(e) => setResult(e.target.value)} className="w-auto">
-          {['All Results', 'PASS', 'FAIL'].map((r) => (
+          {['All Results', 'PASS', 'FAIL', 'PENDING'].map((r) => (
             <option key={r}>{r}</option>
           ))}
         </SelectInput>
@@ -56,7 +56,13 @@ export function ReportsRepository() {
             </tr>
           </thead>
           <tbody className="divide-y divide-ink-100">
-            {rows.map((r) => (
+            {rows.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="px-5 py-12 text-center text-sm text-ink-500">
+                  No reports match the current filters.
+                </td>
+              </tr>
+            ) : rows.map((r) => (
               <tr key={r.reportId} className="transition-colors hover:bg-ink-50/70">
                 <td className="whitespace-nowrap px-5 py-3.5">
                   <div className="font-mono text-xs font-medium text-ink-900">{r.reportId}</div>
