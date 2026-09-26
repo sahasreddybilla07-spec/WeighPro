@@ -3,6 +3,13 @@ import { useState } from 'react'
 import { weighingPerformanceObservations } from '../../../data/mockData'
 import { Button } from '../../../components/ui/Button'
 import { StatusBadge } from '../../../components/ui/StatusBadge'
+import { CalculationExplainer } from '../../../components/testing/CalculationExplainer'
+import { formatSignedKg, parseKg } from '../../../lib/utils'
+
+const FIRST_COMPLETED = weighingPerformanceObservations.find((r) => r.result !== 'NOT TESTED')
+const WORKED_EXAMPLE = FIRST_COMPLETED
+  ? `${FIRST_COMPLETED.indicated} − ${FIRST_COMPLETED.testLoad} = ${FIRST_COMPLETED.error}, within ${FIRST_COMPLETED.mpe} → ${FIRST_COMPLETED.result}`
+  : undefined
 
 export function WeighingPerformanceTab() {
   const [values, setValues] = useState<Record<string, string>>({})
@@ -24,8 +31,14 @@ export function WeighingPerformanceTab() {
         </div>
       </div>
 
+      <CalculationExplainer
+        formula="Error = Indicated Value − Test Load"
+        passCondition="PASS when |Error| ≤ Permissible Error (MPE)"
+        example={WORKED_EXAMPLE}
+      />
+
       <div className="overflow-x-auto rounded-xl border border-ink-200">
-        <table className="w-full min-w-[720px] border-collapse text-left">
+        <table className="w-full min-w-[820px] border-collapse text-left">
           <thead>
             <tr className="bg-ink-50">
               {['Test Load', 'Indicated Value', 'Error', 'Permissible Error (MPE)', 'Result', ''].map((col) => (
@@ -38,6 +51,14 @@ export function WeighingPerformanceTab() {
           <tbody className="divide-y divide-ink-100">
             {weighingPerformanceObservations.map((row) => {
               const pending = row.result === 'NOT TESTED'
+              const typed = values[row.testLoad]
+              const typedNum = typed ? parseFloat(typed) : NaN
+              const testLoadNum = parseKg(row.testLoad)
+              const mpeNum = parseKg(row.mpe)
+              const hasPreview = pending && !Number.isNaN(typedNum) && testLoadNum !== null && mpeNum !== null
+              const previewError = hasPreview ? typedNum - testLoadNum! : null
+              const previewPass = hasPreview && previewError !== null ? Math.abs(previewError) <= mpeNum! : null
+
               return (
                 <tr key={row.testLoad} className={pending ? 'bg-cyan-50/30' : undefined}>
                   <td className="whitespace-nowrap px-5 py-3 font-mono text-sm text-ink-800">{row.testLoad}</td>
@@ -46,17 +67,28 @@ export function WeighingPerformanceTab() {
                       <input
                         value={values[row.testLoad] ?? ''}
                         onChange={(e) => setValues((v) => ({ ...v, [row.testLoad]: e.target.value }))}
-                        placeholder="Enter reading…"
-                        className="w-32 rounded-md border border-ink-200 px-2 py-1 font-mono text-sm focus:border-cyan-500 focus:outline-none"
+                        placeholder="Reading (kg)…"
+                        inputMode="decimal"
+                        className="w-32 rounded-md border border-ink-200 bg-surface px-2 py-1 font-mono text-sm text-ink-900 focus:border-cyan-500 focus:outline-none"
                       />
                     ) : (
                       <span className="font-mono text-sm text-ink-800">{row.indicated}</span>
                     )}
                   </td>
-                  <td className="whitespace-nowrap px-5 py-3 font-mono text-sm text-ink-600">{pending ? '—' : row.error}</td>
+                  <td className="whitespace-nowrap px-5 py-3 font-mono text-sm text-ink-600">
+                    {pending ? (previewError !== null ? formatSignedKg(previewError) : '—') : row.error}
+                  </td>
                   <td className="whitespace-nowrap px-5 py-3 font-mono text-sm text-ink-600">{row.mpe}</td>
                   <td className="whitespace-nowrap px-5 py-3">
-                    <StatusBadge status={row.result} />
+                    {pending ? (
+                      previewPass !== null ? (
+                        <StatusBadge status={previewPass ? 'PASS' : 'FAIL'} />
+                      ) : (
+                        <StatusBadge status="NOT TESTED" />
+                      )
+                    ) : (
+                      <StatusBadge status={row.result} />
+                    )}
                   </td>
                   <td className="whitespace-nowrap px-5 py-3">
                     {pending && (

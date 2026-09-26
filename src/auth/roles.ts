@@ -1,5 +1,4 @@
 import {
-  BookOpenCheck,
   ClipboardList,
   FileText,
   FlaskConical,
@@ -16,10 +15,10 @@ import type { LucideIcon } from 'lucide-react'
 export type Role = 'admin' | 'manager' | 'tester' | 'reviewer'
 
 export const ROLE_LABELS: Record<Role, string> = {
-  admin: 'System Admin',
+  admin: 'Director',
   manager: 'Lab Manager',
-  tester: 'Tester',
-  reviewer: 'Reviewer',
+  tester: 'Testing Technician',
+  reviewer: 'Legal Reviewer',
 }
 
 export interface DummyAccount {
@@ -88,7 +87,6 @@ export const ROLE_NAV: Record<Role, NavItem[]> = {
     { label: 'Evaluations', to: '/evaluations', icon: ClipboardList },
     { label: 'Reports', to: '/reports', icon: FileText },
     { label: 'Users', to: '/users', icon: Users },
-    { label: 'OIML Rules', to: '/oiml-rules', icon: BookOpenCheck },
     { label: 'Settings', to: '/settings', icon: Settings },
     { label: 'Audit History', to: '/audit-history', icon: History },
   ],
@@ -123,7 +121,7 @@ interface RoutePermission {
   roles: Role[]
 }
 
-// Centralized permissions. The System Admin is the top of the role hierarchy
+// Centralized permissions. The Director is the top of the role hierarchy
 // (section 6) and can reach every route; every other role is limited to
 // exactly what is declared here.
 const ROUTE_PERMISSIONS: RoutePermission[] = [

@@ -27,7 +27,7 @@ export function NotificationPanel() {
       >
         <Bell className="h-[18px] w-[18px]" strokeWidth={2} />
         {unreadCount > 0 && (
-          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-danger-500 ring-2 ring-white" />
+          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-danger-500 ring-2 ring-surface" />
         )}
       </button>
 
@@ -38,7 +38,7 @@ export function NotificationPanel() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="absolute right-0 z-50 mt-2 w-80 overflow-hidden rounded-xl border border-ink-100 bg-white shadow-popover"
+            className="absolute right-0 z-50 mt-2 w-80 overflow-hidden rounded-xl border border-ink-100 bg-surface shadow-popover"
           >
             <div className="flex items-center justify-between border-b border-ink-100 px-4 py-3">
               <p className="text-sm font-semibold text-ink-900">Notifications</p>

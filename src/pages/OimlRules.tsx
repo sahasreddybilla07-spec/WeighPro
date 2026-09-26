@@ -5,7 +5,7 @@ import { StatusBadge } from '../components/ui/StatusBadge'
 export function OimlRules() {
   return (
     <div className="space-y-5">
-      <div className="flex items-center gap-4 rounded-2xl border border-ink-200 bg-white p-5 shadow-card">
+      <div className="flex items-center gap-4 rounded-2xl border border-ink-200 bg-surface p-5 shadow-card">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
           <BookOpenCheck className="h-5 w-5" strokeWidth={2} />
         </span>
@@ -15,7 +15,7 @@ export function OimlRules() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-ink-200 bg-white shadow-card">
+      <div className="rounded-2xl border border-ink-200 bg-surface shadow-card">
         <div className="border-b border-ink-100 px-5 py-4">
           <h3 className="text-sm font-semibold text-ink-900">Applicable Test Categories</h3>
           <p className="mt-0.5 text-xs text-ink-500">Reference structure only — full MPE tables will be digitized in a future release.</p>

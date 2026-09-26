@@ -3,6 +3,129 @@
 @tailwind utilities;
 
 @layer base {
+  :root,
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+
+    --ink-50: 11 18 32;
+    --ink-100: 17 27 46;
+    --ink-200: 28 42 68;
+    --ink-300: 43 60 92;
+    --ink-400: 91 103 134;
+    --ink-500: 139 150 178;
+    --ink-600: 168 178 200;
+    --ink-700: 196 204 221;
+    --ink-800: 222 227 237;
+    --ink-900: 244 246 250;
+
+    --surface-DEFAULT: 20 31 56;
+    --surface-elevated: 28 42 72;
+
+    --brand-50: 16 29 48;
+    --brand-100: 22 39 61;
+    --brand-200: 30 58 82;
+    --brand-300: 44 84 112;
+    --brand-400: 59 109 144;
+    --brand-500: 74 134 172;
+    --brand-600: 74 137 196;
+    --brand-700: 62 124 184;
+    --brand-800: 91 149 206;
+    --brand-900: 127 176 222;
+
+    --cyan-50: 14 43 46;
+    --cyan-100: 18 58 61;
+    --cyan-200: 27 79 83;
+    --cyan-300: 42 110 114;
+    --cyan-400: 61 143 148;
+    --cyan-500: 63 195 209;
+    --cyan-600: 85 208 221;
+    --cyan-700: 47 168 182;
+
+    --success-50: 14 36 25;
+    --success-100: 19 58 41;
+    --success-500: 63 192 136;
+    --success-600: 85 204 152;
+    --success-700: 46 156 110;
+
+    --danger-50: 42 20 20;
+    --danger-100: 61 28 27;
+    --danger-500: 240 101 92;
+    --danger-600: 245 128 118;
+    --danger-700: 217 86 76;
+
+    --warning-50: 42 32 15;
+    --warning-100: 61 46 20;
+    --warning-500: 227 168 61;
+    --warning-600: 237 187 95;
+    --warning-700: 196 146 46;
+
+    --info-50: 16 29 48;
+    --info-100: 22 39 61;
+    --info-500: 74 134 172;
+    --info-600: 74 137 196;
+  }
+
+  :root[data-theme='light'] {
+    color-scheme: light;
+
+    --ink-50: 241 244 245;
+    --ink-100: 231 236 237;
+    --ink-200: 215 224 227;
+    --ink-300: 194 205 209;
+    --ink-400: 154 169 174;
+    --ink-500: 105 119 125;
+    --ink-600: 82 97 102;
+    --ink-700: 61 74 79;
+    --ink-800: 38 49 53;
+    --ink-900: 23 33 38;
+
+    --surface-DEFAULT: 255 255 255;
+    --surface-elevated: 255 255 255;
+
+    --brand-50: 234 242 244;
+    --brand-100: 210 228 233;
+    --brand-200: 168 204 214;
+    --brand-300: 121 175 192;
+    --brand-400: 74 140 163;
+    --brand-500: 36 90 115;
+    --brand-600: 29 74 95;
+    --brand-700: 23 59 77;
+    --brand-800: 17 44 56;
+    --brand-900: 11 31 40;
+
+    --cyan-50: 231 250 251;
+    --cyan-100: 199 241 244;
+    --cyan-200: 150 227 233;
+    --cyan-300: 99 207 218;
+    --cyan-400: 77 184 208;
+    --cyan-500: 22 166 182;
+    --cyan-600: 18 139 153;
+    --cyan-700: 14 110 121;
+
+    --success-50: 234 247 241;
+    --success-100: 205 238 224;
+    --success-500: 35 132 90;
+    --success-600: 29 109 74;
+    --success-700: 23 90 61;
+
+    --danger-50: 251 238 237;
+    --danger-100: 245 214 212;
+    --danger-500: 201 74 69;
+    --danger-600: 176 57 52;
+    --danger-700: 142 46 42;
+
+    --warning-50: 251 243 231;
+    --warning-100: 243 224 191;
+    --warning-500: 197 139 42;
+    --warning-600: 168 116 31;
+    --warning-700: 135 92 25;
+
+    --info-50: 234 242 244;
+    --info-100: 210 228 233;
+    --info-500: 36 90 115;
+    --info-600: 29 74 95;
+  }
+
   * {
     @apply border-ink-200;
   }
@@ -12,9 +135,13 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  html,
   body {
-    @apply text-ink-900 font-sans antialiased;
-    background-color: #F1F4F5;
+    @apply bg-ink-50;
+  }
+
+  body {
+    @apply text-ink-900 font-sans antialiased transition-colors duration-200;
   }
 
   ::selection {
@@ -22,7 +149,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid #16A6B6;
+    outline: 2px solid rgb(var(--cyan-500));
     outline-offset: 2px;
   }
 }
@@ -36,7 +163,7 @@
     background: transparent;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: #D7E0E3;
+    background-color: rgb(var(--ink-200));
     border-radius: 999px;
   }
 

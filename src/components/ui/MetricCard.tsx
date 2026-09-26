@@ -38,10 +38,11 @@ interface MetricCardProps {
   icon: LucideIcon
   tone: Tone
   context: string
+  suffix?: string
   delayMs?: number
 }
 
-export function MetricCard({ title, value, icon: Icon, tone, context, delayMs = 0 }: MetricCardProps) {
+export function MetricCard({ title, value, icon: Icon, tone, context, suffix, delayMs = 0 }: MetricCardProps) {
   const animatedValue = useCountUp(value, 1100, delayMs)
 
   return (
@@ -49,7 +50,7 @@ export function MetricCard({ title, value, icon: Icon, tone, context, delayMs = 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, delay: delayMs / 1000, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative overflow-hidden rounded-2xl border border-ink-200 bg-white p-5 shadow-card transition-shadow duration-200 hover:shadow-raised"
+      className="group relative overflow-hidden rounded-2xl border border-ink-200 bg-surface p-5 shadow-card transition-shadow duration-200 hover:shadow-raised"
     >
       {/* Faint gauge-bezel ring: a quiet dial motif tucked behind the icon */}
       <span
@@ -66,6 +67,7 @@ export function MetricCard({ title, value, icon: Icon, tone, context, delayMs = 
       <p className="relative mt-4 text-sm font-medium text-ink-500">{title}</p>
       <p className="relative mt-1 font-mono text-[27px] font-semibold leading-none tracking-tight text-ink-900 tabular-nums">
         {formatNumber(animatedValue)}
+        {suffix && <span className="text-lg">{suffix}</span>}
       </p>
       <p className="relative mt-2 text-xs text-ink-400">{context}</p>
     </motion.div>

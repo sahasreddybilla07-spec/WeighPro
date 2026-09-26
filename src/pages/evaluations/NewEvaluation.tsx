@@ -5,7 +5,7 @@ import { Button } from '../../components/ui/Button'
 import { Field, FormSection, SelectInput, TextInput } from '../../components/ui/FormSection'
 import { WorkflowStepper } from '../../components/dashboard/shared/WorkflowStepper'
 
-const STEPS = ['Select Instrument', 'Evaluation Details', 'Lab Conditions', 'Assign Tester', 'Assign Reviewer', 'Begin Testing']
+const STEPS = ['Select Instrument', 'Evaluation Details', 'Lab Conditions', 'Assign Testing Technician', 'Assign Legal Reviewer', 'Begin Testing']
 
 const TESTERS = ['Ananya Sharma', 'Rohit Verma', 'Divya Nair', 'Karthik Iyer', 'Meera Pillai']
 const REVIEWERS = ['Suresh Menon', 'Arjun Rao', 'Kavita Rangan']
@@ -91,8 +91,8 @@ export function NewEvaluation() {
       )}
 
       {step === 3 && (
-        <FormSection title="Assign Tester" description="Select the tester responsible for performing this evaluation">
-          <Field label="Tester" full>
+        <FormSection title="Assign Testing Technician" description="Select the testing technician responsible for performing this evaluation">
+          <Field label="Testing Technician" full>
             <SelectInput value={tester} onChange={(e) => setTester(e.target.value)}>
               {TESTERS.map((t) => (
                 <option key={t}>{t}</option>
@@ -103,8 +103,8 @@ export function NewEvaluation() {
       )}
 
       {step === 4 && (
-        <FormSection title="Assign Reviewer" description="Select the reviewer who will verify and approve this evaluation">
-          <Field label="Reviewer" full hint="A tester cannot be assigned as the reviewer for their own evaluation">
+        <FormSection title="Assign Legal Reviewer" description="Select the legal reviewer who will verify and approve this evaluation">
+          <Field label="Legal Reviewer" full hint="A testing technician cannot be assigned as the legal reviewer for their own evaluation">
             <SelectInput value={reviewer} onChange={(e) => setReviewer(e.target.value)}>
               {REVIEWERS.map((r) => (
                 <option key={r}>{r}</option>
@@ -115,15 +115,15 @@ export function NewEvaluation() {
       )}
 
       {step === 5 && (
-        <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
+        <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
           <h3 className="text-sm font-semibold text-ink-900">Ready to Begin Testing</h3>
           <p className="mt-0.5 text-xs text-ink-500">Review the summary below, then begin the testing workspace.</p>
           <dl className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {[
               ['Instrument', `${instrument.manufacturer} ${instrument.model} (${instrument.serial})`],
               ['Laboratory', instrument.lab],
-              ['Tester', tester],
-              ['Reviewer', reviewer],
+              ['Testing Technician', tester],
+              ['Legal Reviewer', reviewer],
             ].map(([label, value]) => (
               <div key={label} className="rounded-lg bg-ink-50 px-4 py-3">
                 <dt className="text-xs font-semibold uppercase tracking-wide text-ink-400">{label}</dt>

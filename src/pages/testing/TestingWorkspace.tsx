@@ -24,7 +24,7 @@ export function TestingWorkspace() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-ink-200 bg-white p-5 shadow-card">
+      <div className="rounded-2xl border border-ink-200 bg-surface p-5 shadow-card">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2.5">
@@ -35,7 +35,7 @@ export function TestingWorkspace() {
           </div>
           <div className="flex gap-6 text-sm">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">Tester</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">Testing Technician</p>
               <p className="mt-0.5 font-medium text-ink-900">{evaluation.tester}</p>
             </div>
             <div>
@@ -46,7 +46,7 @@ export function TestingWorkspace() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-ink-200 bg-white shadow-card">
+      <div className="rounded-2xl border border-ink-200 bg-surface shadow-card">
         <Tabs tabs={TABS} active={tab} onChange={setTab} />
         <div className="p-5">
           {tab === 'weighing' && <WeighingPerformanceTab />}

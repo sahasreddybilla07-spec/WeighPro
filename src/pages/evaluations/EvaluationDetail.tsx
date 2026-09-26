@@ -6,6 +6,7 @@ import { allEvaluations, weighingPerformanceObservations } from '../../data/mock
 import { Button } from '../../components/ui/Button'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { TextArea } from '../../components/ui/FormSection'
+import { CalculationExplainer } from '../../components/testing/CalculationExplainer'
 
 export function EvaluationDetail() {
   const { id } = useParams()
@@ -31,7 +32,7 @@ export function EvaluationDetail() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
+      <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5">
@@ -49,7 +50,7 @@ export function EvaluationDetail() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
+        <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
           <h3 className="text-sm font-semibold text-ink-900">Instrument Information</h3>
           <dl className="mt-4 space-y-3">
             {[
@@ -66,12 +67,12 @@ export function EvaluationDetail() {
           </dl>
         </div>
 
-        <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
-          <h3 className="text-sm font-semibold text-ink-900">Tester &amp; Reviewer Information</h3>
+        <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
+          <h3 className="text-sm font-semibold text-ink-900">Testing Technician &amp; Legal Reviewer Information</h3>
           <dl className="mt-4 space-y-3">
             {[
-              ['Tester', evaluation.tester],
-              ['Reviewer', evaluation.reviewer],
+              ['Testing Technician', evaluation.tester],
+              ['Legal Reviewer', evaluation.reviewer],
               ['Created', evaluation.createdDate],
               ['Submitted', evaluation.submittedDate ?? 'Not yet submitted'],
             ].map(([label, value]) => (
@@ -84,10 +85,16 @@ export function EvaluationDetail() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-ink-200 bg-white shadow-card">
+      <div className="rounded-2xl border border-ink-200 bg-surface shadow-card">
         <div className="border-b border-ink-100 px-6 py-4">
           <h3 className="text-sm font-semibold text-ink-900">Test Observations &amp; OIML Compliance Result</h3>
           <p className="mt-0.5 text-xs text-ink-500">Weighing performance summary ({evaluation.testsCompleted}/{evaluation.testsTotal} tests recorded)</p>
+        </div>
+        <div className="px-6 py-4">
+          <CalculationExplainer
+            formula="Error = Indicated Value − Test Load"
+            passCondition="PASS when |Error| ≤ Permissible Error (MPE)"
+          />
         </div>
         <table className="w-full min-w-[640px] border-collapse text-left">
           <thead>
@@ -115,7 +122,7 @@ export function EvaluationDetail() {
         </table>
       </div>
 
-      <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
+      <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
         <h3 className="text-sm font-semibold text-ink-900">Evidence &amp; Documents</h3>
         <div className="mt-3 flex flex-wrap gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-md border border-ink-200 bg-ink-50 px-2.5 py-1.5 text-xs text-ink-600">
@@ -128,9 +135,9 @@ export function EvaluationDetail() {
       </div>
 
       {isReviewer && (
-        <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
-          <h3 className="text-sm font-semibold text-ink-900">Reviewer Decision</h3>
-          <p className="mt-0.5 text-xs text-ink-500">A tester cannot approve their own evaluation — only reviewers and lab managers can decide here.</p>
+        <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
+          <h3 className="text-sm font-semibold text-ink-900">Legal Reviewer Decision</h3>
+          <p className="mt-0.5 text-xs text-ink-500">A testing technician cannot approve their own evaluation — only legal reviewers and lab managers can decide here.</p>
           <TextArea
             className="mt-4"
             rows={3}

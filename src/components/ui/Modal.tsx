@@ -21,7 +21,7 @@ export function Modal({ open, onClose, title, description, children, footer }: M
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="absolute inset-0 bg-ink-900/40 backdrop-blur-[1px]"
+            className="absolute inset-0 bg-black/40 backdrop-blur-[1px]"
             onClick={onClose}
           />
           <motion.div
@@ -29,7 +29,7 @@ export function Modal({ open, onClose, title, description, children, footer }: M
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 w-full max-w-lg rounded-2xl border border-ink-200 bg-white shadow-popover"
+            className="relative z-10 w-full max-w-lg rounded-2xl border border-ink-200 bg-surface shadow-popover"
           >
             <div className="flex items-start justify-between border-b border-ink-100 px-6 py-4">
               <div>

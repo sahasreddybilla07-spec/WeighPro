@@ -3,8 +3,8 @@ import { ClipboardList, ShieldCheck, UserCog, Users } from 'lucide-react'
 import { userOverview } from '../../../data/mockData'
 
 const ROWS = [
-  { label: 'Testers', value: userOverview.testers, icon: ClipboardList },
-  { label: 'Reviewers', value: userOverview.reviewers, icon: ShieldCheck },
+  { label: 'Testing Technicians', value: userOverview.testers, icon: ClipboardList },
+  { label: 'Legal Reviewers', value: userOverview.reviewers, icon: ShieldCheck },
   { label: 'Lab Managers', value: userOverview.labManagers, icon: UserCog },
 ]
 
@@ -14,7 +14,7 @@ export function UserOverviewCard() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
-      className="rounded-2xl border border-ink-200 bg-white p-5 shadow-card"
+      className="rounded-2xl border border-ink-200 bg-surface p-5 shadow-card"
     >
       <div className="flex items-center gap-2">
         <Users className="h-4 w-4 text-brand-600" strokeWidth={2} />

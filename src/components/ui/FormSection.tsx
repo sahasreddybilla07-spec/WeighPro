@@ -10,7 +10,7 @@ interface FormSectionProps {
 
 export function FormSection({ title, description, children, className }: FormSectionProps) {
   return (
-    <div className={cn('rounded-2xl border border-ink-200 bg-white p-6 shadow-card', className)}>
+    <div className={cn('rounded-2xl border border-ink-200 bg-surface p-6 shadow-card', className)}>
       <h3 className="text-sm font-semibold text-ink-900">{title}</h3>
       {description && <p className="mt-0.5 text-xs text-ink-500">{description}</p>}
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">{children}</div>
@@ -40,7 +40,7 @@ export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
     <input
       {...props}
       className={cn(
-        'w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 placeholder:text-ink-400 transition-colors focus:border-cyan-500 focus:outline-none',
+        'w-full rounded-lg border border-ink-200 bg-surface px-3 py-2.5 text-sm text-ink-900 placeholder:text-ink-400 transition-colors focus:border-cyan-500 focus:outline-none',
         props.className,
       )}
     />
@@ -52,7 +52,7 @@ export function SelectInput(props: React.SelectHTMLAttributes<HTMLSelectElement>
     <select
       {...props}
       className={cn(
-        'w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 transition-colors focus:border-cyan-500 focus:outline-none',
+        'w-full rounded-lg border border-ink-200 bg-surface px-3 py-2.5 text-sm text-ink-900 transition-colors focus:border-cyan-500 focus:outline-none',
         props.className,
       )}
     />
@@ -64,7 +64,7 @@ export function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement
     <textarea
       {...props}
       className={cn(
-        'w-full rounded-lg border border-ink-200 bg-white px-3 py-2.5 text-sm text-ink-900 placeholder:text-ink-400 transition-colors focus:border-cyan-500 focus:outline-none',
+        'w-full rounded-lg border border-ink-200 bg-surface px-3 py-2.5 text-sm text-ink-900 placeholder:text-ink-400 transition-colors focus:border-cyan-500 focus:outline-none',
         props.className,
       )}
     />

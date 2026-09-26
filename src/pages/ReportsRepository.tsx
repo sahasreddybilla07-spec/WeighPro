@@ -25,7 +25,7 @@ export function ReportsRepository() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-1 items-center gap-2 rounded-lg border border-ink-200 bg-white px-3 py-2.5 sm:max-w-sm">
+        <div className="flex flex-1 items-center gap-2 rounded-lg border border-ink-200 bg-surface px-3 py-2.5 sm:max-w-sm">
           <Search className="h-4 w-4 shrink-0 text-ink-400" />
           <input
             value={query}
@@ -45,7 +45,7 @@ export function ReportsRepository() {
         <table className="w-full min-w-[900px] border-collapse text-left">
           <thead>
             <tr className="bg-ink-50">
-              {['Report ID', 'Instrument', 'Serial', 'Evaluation', 'Date', 'Result', 'Reviewer', 'Status', ''].map((col) => (
+              {['Report ID', 'Instrument', 'Serial', 'Evaluation', 'Date', 'Result', 'Legal Reviewer', 'Status', ''].map((col) => (
                 <th key={col} className="whitespace-nowrap px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ink-400">
                   {col}
                 </th>

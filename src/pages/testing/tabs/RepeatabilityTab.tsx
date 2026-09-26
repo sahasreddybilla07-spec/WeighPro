@@ -1,6 +1,16 @@
 import { repeatabilityReadings } from '../../../data/mockData'
 import { Button } from '../../../components/ui/Button'
 import { StatusBadge } from '../../../components/ui/StatusBadge'
+import { CalculationExplainer } from '../../../components/testing/CalculationExplainer'
+import { cn, parseKg } from '../../../lib/utils'
+
+const MPE_KG = 0.005
+
+const readingValues = repeatabilityReadings.map((row) => parseKg(row.reading)!)
+const maxReading = Math.max(...readingValues)
+const minReading = Math.min(...readingValues)
+const spreadKg = maxReading - minReading
+const spreadPass = spreadKg <= MPE_KG
 
 export function RepeatabilityTab() {
   return (
@@ -8,7 +18,7 @@ export function RepeatabilityTab() {
       <div className="grid grid-cols-1 gap-4 rounded-xl bg-ink-50 p-4 sm:grid-cols-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">Number of Repetitions</p>
-          <p className="mt-0.5 text-sm font-medium text-ink-900">5</p>
+          <p className="mt-0.5 text-sm font-medium text-ink-900">{repeatabilityReadings.length}</p>
         </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">Applied Load</p>
@@ -16,9 +26,15 @@ export function RepeatabilityTab() {
         </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">Permissible Error (MPE)</p>
-          <p className="mt-0.5 font-mono text-sm font-medium text-ink-900">±0.005 kg</p>
+          <p className="mt-0.5 font-mono text-sm font-medium text-ink-900">±{MPE_KG.toFixed(3)} kg</p>
         </div>
       </div>
+
+      <CalculationExplainer
+        formula="Spread = Max Reading − Min Reading"
+        passCondition="PASS when Spread ≤ Permissible Error (MPE)"
+        example={`${maxReading.toFixed(3)} kg − ${minReading.toFixed(3)} kg = ${spreadKg.toFixed(3)} kg, ${spreadPass ? 'within' : 'exceeds'} ±${MPE_KG.toFixed(3)} kg → ${spreadPass ? 'PASS' : 'FAIL'}`}
+      />
 
       <div className="overflow-x-auto rounded-xl border border-ink-200">
         <table className="w-full min-w-[480px] border-collapse text-left">
@@ -43,12 +59,19 @@ export function RepeatabilityTab() {
         </table>
       </div>
 
-      <div className="flex items-center justify-between rounded-xl border border-success-100 bg-success-50 px-5 py-4">
+      <div
+        className={cn(
+          'flex items-center justify-between rounded-xl border px-5 py-4',
+          spreadPass ? 'border-success-100 bg-success-50' : 'border-danger-100 bg-danger-50',
+        )}
+      >
         <div>
-          <p className="text-sm font-semibold text-success-700">Repeatability Result</p>
-          <p className="mt-0.5 text-xs text-success-700/80">Spread of readings (0.002 kg) is within the permissible error.</p>
+          <p className={cn('text-sm font-semibold', spreadPass ? 'text-success-700' : 'text-danger-700')}>Repeatability Result</p>
+          <p className={cn('mt-0.5 text-xs', spreadPass ? 'text-success-700/80' : 'text-danger-700/80')}>
+            Spread of readings ({spreadKg.toFixed(3)} kg) is {spreadPass ? 'within' : 'outside'} the permissible error.
+          </p>
         </div>
-        <StatusBadge status="PASS" />
+        <StatusBadge status={spreadPass ? 'PASS' : 'FAIL'} />
       </div>
 
       <div className="flex justify-end">

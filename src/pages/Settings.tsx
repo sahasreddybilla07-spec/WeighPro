@@ -38,7 +38,7 @@ export function Settings() {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-ink-200 bg-white shadow-card">
+      <div className="rounded-2xl border border-ink-200 bg-surface shadow-card">
         <Tabs tabs={SECTIONS} active={tab} onChange={setTab} />
         <div className="p-6">
           {tab === 'organization' && (

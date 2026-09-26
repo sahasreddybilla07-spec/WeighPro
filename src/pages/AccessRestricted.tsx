@@ -8,7 +8,7 @@ export function AccessRestricted() {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl border border-danger-100 bg-white p-10 text-center"
+      className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl border border-danger-100 bg-surface p-10 text-center"
     >
       <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-danger-50 text-danger-600">
         <ShieldAlert className="h-6 w-6" strokeWidth={2} />

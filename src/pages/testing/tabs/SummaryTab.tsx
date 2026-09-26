@@ -16,15 +16,15 @@ export function SummaryTab() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-ink-200 bg-white p-5">
+        <div className="rounded-xl border border-ink-200 bg-surface p-5">
           <h4 className="text-xs font-semibold uppercase tracking-wide text-ink-400">Instrument &amp; Evaluation</h4>
           <dl className="mt-3 space-y-2.5">
             {[
               ['Evaluation ID', evaluation.id],
               ['Instrument', `${evaluation.manufacturer} ${evaluation.model}`],
               ['Serial Number', evaluation.instrumentSerial],
-              ['Tester', evaluation.tester],
-              ['Reviewer', evaluation.reviewer],
+              ['Testing Technician', evaluation.tester],
+              ['Legal Reviewer', evaluation.reviewer],
             ].map(([label, value]) => (
               <div key={label} className="flex items-center justify-between text-sm">
                 <dt className="text-ink-500">{label}</dt>
@@ -34,7 +34,7 @@ export function SummaryTab() {
           </dl>
         </div>
 
-        <div className="rounded-xl border border-ink-200 bg-white p-5">
+        <div className="rounded-xl border border-ink-200 bg-surface p-5">
           <h4 className="text-xs font-semibold uppercase tracking-wide text-ink-400">Laboratory Conditions</h4>
           <dl className="mt-3 space-y-2.5">
             {[
@@ -52,7 +52,7 @@ export function SummaryTab() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-ink-200 bg-white p-5">
+      <div className="rounded-xl border border-ink-200 bg-surface p-5">
         <h4 className="text-xs font-semibold uppercase tracking-wide text-ink-400">Tests Performed</h4>
         <ul className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
           {TESTS_PERFORMED.map((t) => (
@@ -81,7 +81,7 @@ export function SummaryTab() {
           Submit for Review
         </Button>
       </div>
-      <p className="text-right text-xs text-ink-400">Only a reviewer or lab manager can approve an evaluation — testers cannot approve their own work.</p>
+      <p className="text-right text-xs text-ink-400">Only a legal reviewer or lab manager can approve an evaluation — testing technicians cannot approve their own work.</p>
     </div>
   )
 }

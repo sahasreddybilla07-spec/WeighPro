@@ -32,7 +32,7 @@ export function InstrumentsList() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-1 items-center gap-2 rounded-lg border border-ink-200 bg-white px-3 py-2.5 sm:max-w-sm">
+        <div className="flex flex-1 items-center gap-2 rounded-lg border border-ink-200 bg-surface px-3 py-2.5 sm:max-w-sm">
           <Search className="h-4 w-4 shrink-0 text-ink-400" />
           <input
             value={query}

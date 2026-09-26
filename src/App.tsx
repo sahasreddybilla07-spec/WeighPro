@@ -46,10 +46,10 @@ const PLACEHOLDER_ROUTES: { path: string; title: string; element: JSX.Element }[
 ]
 
 const DASHBOARD_META: Record<Role, { title: string; subtitle: string }> = {
-  admin: { title: 'System Admin Dashboard', subtitle: 'System-wide monitoring across laboratories, users and instruments.' },
+  admin: { title: 'Director Overview', subtitle: 'Laboratory Operations & Compliance' },
   manager: { title: 'Lab Manager Dashboard', subtitle: 'Manage laboratory operations and testing team workload.' },
-  tester: { title: 'Tester Dashboard', subtitle: 'Track your assigned evaluations and testing progress.' },
-  reviewer: { title: 'Reviewer Dashboard', subtitle: 'Review submitted evaluations and manage compliance decisions.' },
+  tester: { title: 'Testing Technician Dashboard', subtitle: 'Track your assigned evaluations and testing progress.' },
+  reviewer: { title: 'Legal Reviewer Dashboard', subtitle: 'Review submitted evaluations and manage compliance decisions.' },
 }
 
 function DashboardRoute() {

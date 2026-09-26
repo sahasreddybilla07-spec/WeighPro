@@ -19,7 +19,7 @@ export function ReportPreview() {
         </Button>
       </div>
 
-      <div className="mx-auto max-w-3xl rounded-2xl border border-ink-200 bg-white p-10 shadow-card print:border-0 print:shadow-none">
+      <div className="mx-auto max-w-3xl rounded-2xl border border-ink-200 bg-surface p-10 shadow-card print:border-0 print:shadow-none">
         <div className="flex items-start justify-between border-b border-ink-200 pb-6">
           <BrandLockup size="sm" />
           <div className="text-right">
@@ -80,13 +80,13 @@ export function ReportPreview() {
 
         <div className="mt-8 grid grid-cols-2 gap-6 border-t border-ink-200 pt-6 text-sm">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">Tester</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">Testing Technician</p>
             <p className="mt-1 font-medium text-ink-900">{evaluation.tester}</p>
             <div className="mt-6 h-10 border-b border-dashed border-ink-300" />
             <p className="mt-1 text-xs text-ink-400">Signature</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">Reviewer / Approving Officer</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-ink-400">Legal Reviewer / Approving Officer</p>
             <p className="mt-1 font-medium text-ink-900">{evaluation.reviewer}</p>
             <div className="mt-6 h-10 border-b border-dashed border-ink-300" />
             <p className="mt-1 text-xs text-ink-400">Signature</p>

@@ -17,7 +17,7 @@ export function TableCard({ title, subtitle, action, children, delayMs = 0, clas
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: delayMs / 1000, ease: [0.16, 1, 0.3, 1] }}
-      className={cn('rounded-2xl border border-ink-200 bg-white shadow-card', className)}
+      className={cn('rounded-2xl border border-ink-200 bg-surface shadow-card', className)}
     >
       <div className="flex items-center justify-between border-b border-ink-100 px-5 py-4">
         <div>

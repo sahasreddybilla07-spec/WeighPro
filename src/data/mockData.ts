@@ -45,7 +45,7 @@ export const notifications: Notification[] = [
   { id: 'NOTIF-1', title: 'Correction requested', detail: 'EV-2026-0141 · Essae Digitronics DS-852', timestamp: '18 min ago', read: false },
   { id: 'NOTIF-2', title: 'Evaluation approved', detail: 'EV-2026-0139 · Mettler Toledo IND236', timestamp: '2 hours ago', read: false },
   { id: 'NOTIF-3', title: 'Report generated', detail: 'EV-2026-0139 · ready for download', timestamp: '2 hours ago', read: false },
-  { id: 'NOTIF-4', title: 'Reviewer assigned', detail: 'EV-2026-0142 · Suresh Menon', timestamp: 'Yesterday', read: true },
+  { id: 'NOTIF-4', title: 'Legal reviewer assigned', detail: 'EV-2026-0142 · Suresh Menon', timestamp: 'Yesterday', read: true },
 ]
 
 export interface ActivityItem {
@@ -185,7 +185,7 @@ export const instrumentStatusSummary = {
 
 // ============================================================
 // SHARED: pending review queue (Lab Manager's Review Queue +
-// Reviewer's Pending Review Queue are the same underlying data)
+// Legal Reviewer's Pending Review Queue are the same underlying data)
 // ============================================================
 
 export interface PendingReviewRow {
@@ -246,7 +246,7 @@ export const testingWorkflowCurrentIndex = 4 // currently at Eccentric Loading, 
 export const testerNotifications: Notification[] = [
   { id: 'TN-1', title: 'Correction requested', detail: 'EV-2026-0129 · Retail Counter Scale DS-852', timestamp: '2 hours ago', read: false },
   { id: 'TN-2', title: 'Evaluation approved', detail: 'EV-2026-0121 · Electronic Platform Scale ABC-100', timestamp: 'Yesterday', read: false },
-  { id: 'TN-3', title: 'Reviewer assigned', detail: 'EV-2026-0140 · Suresh Menon', timestamp: '2 days ago', read: true },
+  { id: 'TN-3', title: 'Legal reviewer assigned', detail: 'EV-2026-0140 · Suresh Menon', timestamp: '2 days ago', read: true },
 ]
 
 // ============================================================
@@ -335,13 +335,13 @@ export const allEvaluations: EvaluationRecord[] = [
 ]
 
 // ============================================================
-// USERS  (Admin / Lab Manager module)
+// USERS  (Director / Lab Manager module)
 // ============================================================
 
 export interface UserRecord {
   id: string
   name: string
-  role: 'System Admin' | 'Lab Manager' | 'Tester' | 'Reviewer'
+  role: 'Director' | 'Lab Manager' | 'Testing Technician' | 'Legal Reviewer'
   laboratory: string
   status: 'Active' | 'Inactive'
   lastActivity: string
@@ -349,19 +349,19 @@ export interface UserRecord {
 }
 
 export const usersList: UserRecord[] = [
-  { id: 'USR-001', name: 'Rajesh Kulkarni', role: 'System Admin', laboratory: 'Legal Metrology Division, DoCA', status: 'Active', lastActivity: 'Today, 09:15 AM', assignedEvaluations: 0 },
+  { id: 'USR-001', name: 'Rajesh Kulkarni', role: 'Director', laboratory: 'Legal Metrology Division, DoCA', status: 'Active', lastActivity: 'Today, 09:15 AM', assignedEvaluations: 0 },
   { id: 'USR-002', name: 'Priya Desai', role: 'Lab Manager', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: 'Today, 08:50 AM', assignedEvaluations: 0 },
   { id: 'USR-003', name: 'Vikram Nath', role: 'Lab Manager', laboratory: 'National Test House, Kolkata', status: 'Active', lastActivity: 'Yesterday, 4:30 PM', assignedEvaluations: 0 },
   { id: 'USR-004', name: 'Sunita Rao', role: 'Lab Manager', laboratory: 'State Reference Standards Laboratory, Pune', status: 'Active', lastActivity: '2 days ago', assignedEvaluations: 0 },
   { id: 'USR-005', name: 'Farida Sheikh', role: 'Lab Manager', laboratory: 'Legal Metrology Laboratory, Chennai', status: 'Inactive', lastActivity: '3 weeks ago', assignedEvaluations: 0 },
-  { id: 'USR-006', name: 'Ananya Sharma', role: 'Tester', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: 'Today, 09:40 AM', assignedEvaluations: 3 },
-  { id: 'USR-007', name: 'Rohit Verma', role: 'Tester', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: 'Today, 08:05 AM', assignedEvaluations: 3 },
-  { id: 'USR-008', name: 'Divya Nair', role: 'Tester', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: 'Yesterday, 5:52 PM', assignedEvaluations: 2 },
-  { id: 'USR-009', name: 'Karthik Iyer', role: 'Tester', laboratory: 'National Test House, Kolkata', status: 'Active', lastActivity: 'Yesterday, 3:20 PM', assignedEvaluations: 2 },
-  { id: 'USR-010', name: 'Meera Pillai', role: 'Tester', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: '2 days ago', assignedEvaluations: 0 },
-  { id: 'USR-011', name: 'Suresh Menon', role: 'Reviewer', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: 'Today, 10:15 AM', assignedEvaluations: 5 },
-  { id: 'USR-012', name: 'Arjun Rao', role: 'Reviewer', laboratory: 'State Reference Standards Laboratory, Pune', status: 'Active', lastActivity: 'Yesterday, 5:52 PM', assignedEvaluations: 3 },
-  { id: 'USR-013', name: 'Kavita Rangan', role: 'Reviewer', laboratory: 'National Test House, Kolkata', status: 'Inactive', lastActivity: '1 month ago', assignedEvaluations: 0 },
+  { id: 'USR-006', name: 'Ananya Sharma', role: 'Testing Technician', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: 'Today, 09:40 AM', assignedEvaluations: 3 },
+  { id: 'USR-007', name: 'Rohit Verma', role: 'Testing Technician', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: 'Today, 08:05 AM', assignedEvaluations: 3 },
+  { id: 'USR-008', name: 'Divya Nair', role: 'Testing Technician', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: 'Yesterday, 5:52 PM', assignedEvaluations: 2 },
+  { id: 'USR-009', name: 'Karthik Iyer', role: 'Testing Technician', laboratory: 'National Test House, Kolkata', status: 'Active', lastActivity: 'Yesterday, 3:20 PM', assignedEvaluations: 2 },
+  { id: 'USR-010', name: 'Meera Pillai', role: 'Testing Technician', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: '2 days ago', assignedEvaluations: 0 },
+  { id: 'USR-011', name: 'Suresh Menon', role: 'Legal Reviewer', laboratory: 'Regional Reference Standards Laboratory, Bengaluru', status: 'Active', lastActivity: 'Today, 10:15 AM', assignedEvaluations: 5 },
+  { id: 'USR-012', name: 'Arjun Rao', role: 'Legal Reviewer', laboratory: 'State Reference Standards Laboratory, Pune', status: 'Active', lastActivity: 'Yesterday, 5:52 PM', assignedEvaluations: 3 },
+  { id: 'USR-013', name: 'Kavita Rangan', role: 'Legal Reviewer', laboratory: 'National Test House, Kolkata', status: 'Inactive', lastActivity: '1 month ago', assignedEvaluations: 0 },
 ]
 
 // ============================================================
@@ -415,7 +415,7 @@ export const oimlRuleCategories: OimlRuleCategory[] = [
 ]
 
 // ============================================================
-// AUDIT HISTORY  (System Admin)
+// AUDIT HISTORY  (Director)
 // ============================================================
 
 export interface AuditLogRow {
@@ -427,14 +427,14 @@ export interface AuditLogRow {
 }
 
 export const auditLog: AuditLogRow[] = [
-  { timestamp: '2026-09-23 09:42', user: 'Suresh Menon', role: 'Reviewer', action: 'Generated report', reference: 'EV-2026-0139' },
-  { timestamp: '2026-09-23 09:10', user: 'Suresh Menon', role: 'Reviewer', action: 'Approved evaluation', reference: 'EV-2026-0139' },
-  { timestamp: '2026-09-22 17:52', user: 'Arjun Rao', role: 'Reviewer', action: 'Requested correction', reference: 'EV-2026-0141' },
+  { timestamp: '2026-09-23 09:42', user: 'Suresh Menon', role: 'Legal Reviewer', action: 'Generated report', reference: 'EV-2026-0139' },
+  { timestamp: '2026-09-23 09:10', user: 'Suresh Menon', role: 'Legal Reviewer', action: 'Approved evaluation', reference: 'EV-2026-0139' },
+  { timestamp: '2026-09-22 17:52', user: 'Arjun Rao', role: 'Legal Reviewer', action: 'Requested correction', reference: 'EV-2026-0141' },
   { timestamp: '2026-09-22 13:05', user: 'Priya Desai', role: 'Lab Manager', action: 'Registered instrument', reference: 'INST-0037' },
   { timestamp: '2026-09-21 11:20', user: 'Priya Desai', role: 'Lab Manager', action: 'Assigned evaluation', reference: 'EV-2026-0134 → Ananya Sharma' },
-  { timestamp: '2026-09-20 16:15', user: 'Divya Nair', role: 'Tester', action: 'Submitted evaluation', reference: 'EV-2026-0141' },
-  { timestamp: '2026-09-18 10:00', user: 'Rajesh Kulkarni', role: 'System Admin', action: 'Updated OIML rule version', reference: 'R-76-1:2006 (Rev. 2020)' },
-  { timestamp: '2026-09-15 14:12', user: 'Meera Pillai', role: 'Tester', action: 'Completed evaluation', reference: 'EV-2026-0136' },
+  { timestamp: '2026-09-20 16:15', user: 'Divya Nair', role: 'Testing Technician', action: 'Submitted evaluation', reference: 'EV-2026-0141' },
+  { timestamp: '2026-09-18 10:00', user: 'Rajesh Kulkarni', role: 'Director', action: 'Updated OIML rule version', reference: 'R-76-1:2006 (Rev. 2020)' },
+  { timestamp: '2026-09-15 14:12', user: 'Meera Pillai', role: 'Testing Technician', action: 'Completed evaluation', reference: 'EV-2026-0136' },
 ]
 
 // ============================================================

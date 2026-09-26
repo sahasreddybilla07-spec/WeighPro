@@ -25,7 +25,7 @@ export function InstrumentDetails() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
+      <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5">
@@ -45,7 +45,7 @@ export function InstrumentDetails() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
+        <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
           <h3 className="text-sm font-semibold text-ink-900">Technical Specifications</h3>
           <dl className="mt-4 space-y-3">
             {[
@@ -63,7 +63,7 @@ export function InstrumentDetails() {
           </dl>
         </div>
 
-        <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-card">
+        <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
           <h3 className="text-sm font-semibold text-ink-900">Verification Information</h3>
           <dl className="mt-4 space-y-3">
             {[
@@ -83,10 +83,10 @@ export function InstrumentDetails() {
               <ScrollText className="h-3.5 w-3.5" /> Documents / Evidence
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-600">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-ink-200 bg-surface px-2.5 py-1.5 text-xs text-ink-600">
                 <ImageIcon className="h-3.5 w-3.5 text-ink-400" /> instrument_photo.jpg
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-md border border-ink-200 bg-white px-2.5 py-1.5 text-xs text-ink-600">
+              <span className="inline-flex items-center gap-1.5 rounded-md border border-ink-200 bg-surface px-2.5 py-1.5 text-xs text-ink-600">
                 <FileText className="h-3.5 w-3.5 text-ink-400" /> manufacturer_certificate.pdf
               </span>
             </div>
@@ -98,7 +98,7 @@ export function InstrumentDetails() {
         <table className="w-full min-w-[720px] border-collapse text-left">
           <thead>
             <tr className="bg-ink-50">
-              {['Evaluation ID', 'Date', 'Tester', 'Reviewer', 'Status', 'Result', ''].map((col) => (
+              {['Evaluation ID', 'Date', 'Testing Technician', 'Legal Reviewer', 'Status', 'Result', ''].map((col) => (
                 <th key={col} className="whitespace-nowrap px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ink-400">
                   {col}
                 </th>

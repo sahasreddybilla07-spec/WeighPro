@@ -4,6 +4,7 @@ import { PendingReviewTable } from '../../components/dashboard/shared/PendingRev
 import { ActivityFeed } from '../../components/dashboard/shared/ActivityFeed'
 import { QuickActionsCard } from '../../components/dashboard/shared/QuickActionsCard'
 import type { QuickAction } from '../../components/dashboard/shared/QuickActionsCard'
+import { SectionHeading } from '../../components/dashboard/shared/SectionHeading'
 import { ComplianceSummaryBar } from '../../components/dashboard/reviewer/ComplianceSummaryBar'
 import { MetricCard } from '../../components/ui/MetricCard'
 import { recentDecisions, reviewWorkflowCurrentIndex, reviewWorkflowSteps, reviewerMetrics } from '../../data/mockData'
@@ -16,24 +17,33 @@ const QUICK_ACTIONS: QuickAction[] = [
 
 export function ReviewerDashboard() {
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        <MetricCard title="Pending Reviews" value={reviewerMetrics.pendingReviews} icon={ShieldCheck} tone="brand" context="Awaiting your decision" delayMs={0} />
-        <MetricCard title="Due Today" value={reviewerMetrics.dueToday} icon={Clock} tone="warning" context="Reviews due today" delayMs={60} />
-        <MetricCard title="Returned" value={reviewerMetrics.returned} icon={RotateCcw} tone="cyan" context="Sent back for correction" delayMs={120} />
-        <MetricCard title="Approved" value={reviewerMetrics.approved} icon={ShieldCheck} tone="success" context="All-time approvals" delayMs={180} />
-        <MetricCard title="Failed" value={reviewerMetrics.failed} icon={ShieldAlert} tone="danger" context="All-time failures" delayMs={240} />
+    <div className="space-y-8">
+      {/* Primary work: reviews awaiting your decision */}
+      <div>
+        <SectionHeading eyebrow="Your Work" title="Awaiting Your Review" subtitle="Evaluations submitted by testers, pending your decision" />
+        <div className="space-y-6">
+          <PendingReviewTable title="Pending Review Queue" subtitle="Evaluations awaiting your review" delayMs={0.16} />
+          <WorkflowStepper
+            title="Review Status"
+            subtitle="EV-2026-0142 · Electronic Platform Scale ABC-100"
+            steps={reviewWorkflowSteps}
+            currentIndex={reviewWorkflowCurrentIndex}
+            delayMs={0.24}
+          />
+        </div>
       </div>
 
-      <PendingReviewTable title="Pending Review Queue" subtitle="Evaluations awaiting your review" delayMs={0.16} />
-
-      <WorkflowStepper
-        title="Review Status"
-        subtitle="EV-2026-0142 · Electronic Platform Scale ABC-100"
-        steps={reviewWorkflowSteps}
-        currentIndex={reviewWorkflowCurrentIndex}
-        delayMs={0.24}
-      />
+      {/* Secondary: at-a-glance metrics */}
+      <div>
+        <SectionHeading eyebrow="Overview" title="At a Glance" muted />
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          <MetricCard title="Pending Reviews" value={reviewerMetrics.pendingReviews} icon={ShieldCheck} tone="brand" context="Awaiting your decision" delayMs={0} />
+          <MetricCard title="Due Today" value={reviewerMetrics.dueToday} icon={Clock} tone="warning" context="Reviews due today" delayMs={60} />
+          <MetricCard title="Returned" value={reviewerMetrics.returned} icon={RotateCcw} tone="cyan" context="Sent back for correction" delayMs={120} />
+          <MetricCard title="Approved" value={reviewerMetrics.approved} icon={ShieldCheck} tone="success" context="All-time approvals" delayMs={180} />
+          <MetricCard title="Failed" value={reviewerMetrics.failed} icon={ShieldAlert} tone="danger" context="All-time failures" delayMs={240} />
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <ComplianceSummaryBar />

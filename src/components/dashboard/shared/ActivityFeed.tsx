@@ -28,7 +28,7 @@ export function ActivityFeed({ title, subtitle, items, maxHeightPx = 420, delayM
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: delayMs / 1000, ease: [0.16, 1, 0.3, 1] }}
-      className={cn('rounded-2xl border border-ink-200 bg-white p-5 shadow-card', className)}
+      className={cn('rounded-2xl border border-ink-200 bg-surface p-5 shadow-card', className)}
     >
       <h3 className="text-sm font-semibold text-ink-900">{title}</h3>
       {subtitle && <p className="mt-0.5 text-xs text-ink-400">{subtitle}</p>}
@@ -49,7 +49,7 @@ export function ActivityFeed({ title, subtitle, items, maxHeightPx = 420, delayM
               transition={{ duration: 0.35, delay: delayMs / 1000 + 0.05 + index * 0.05 }}
               className="relative flex gap-3"
             >
-              <div className={cn('relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ring-4 ring-white', config.chip)}>
+              <div className={cn('relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ring-4 ring-surface', config.chip)}>
                 <Icon className={cn('h-4 w-4', config.iconColor)} strokeWidth={2} />
               </div>
               <div className="min-w-0 flex-1 pb-0.5">

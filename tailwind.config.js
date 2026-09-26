@@ -1,4 +1,17 @@
 /** @type {import('tailwindcss').Config} */
+
+// Reads each color from a CSS custom property (defined per-theme in
+// src/index.css) so every existing `bg-ink-*` / `text-brand-*` / etc. class
+// automatically re-themes when `data-theme` flips — no dark: variants needed.
+function withOpacity(varName) {
+  return ({ opacityValue }) =>
+    opacityValue === undefined ? `rgb(var(${varName}))` : `rgb(var(${varName}) / ${opacityValue})`
+}
+
+function ramp(name, steps) {
+  return Object.fromEntries(steps.map((step) => [step, withOpacity(`--${name}-${step}`)]))
+}
+
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
@@ -8,73 +21,25 @@ export default {
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
       },
       colors: {
-        // Primary ramp: Steel Blue (500) anchored by Industrial Navy (700).
+        // Primary ramp: Steel Blue anchored by Industrial Navy.
         // Used for primary navigation, primary buttons and important actions.
-        brand: {
-          50: '#EAF2F4',
-          100: '#D2E4E9',
-          200: '#A8CCD6',
-          300: '#79AFC0',
-          400: '#4A8CA3',
-          500: '#245A73',
-          600: '#1D4A5F',
-          700: '#173B4D',
-          800: '#112C38',
-          900: '#0B1F28',
-        },
+        brand: ramp('brand', [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]),
         // Digital Cyan ramp: accents and active-state indicators only.
-        cyan: {
-          50: '#E7FAFB',
-          100: '#C7F1F4',
-          200: '#96E3E9',
-          300: '#63CFDA',
-          400: '#4DB8D0',
-          500: '#16A6B6',
-          600: '#128B99',
-          700: '#0E6E79',
-        },
-        // Neutral scale built from the given text/border/background values.
-        ink: {
-          50: '#F1F4F5',
-          100: '#E7ECED',
-          200: '#D7E0E3',
-          300: '#C2CDD1',
-          400: '#9AA9AE',
-          500: '#69777D',
-          600: '#526166',
-          700: '#3D4A4F',
-          800: '#263135',
-          900: '#172126',
+        cyan: ramp('cyan', [50, 100, 200, 300, 400, 500, 600, 700]),
+        // Neutral scale: text, borders, page background, hover states.
+        ink: ramp('ink', [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]),
+        // Card/popover/input backgrounds. Distinct from `ink` because dark
+        // mode needs a page background darker than its elevated surfaces.
+        surface: {
+          DEFAULT: withOpacity('--surface-DEFAULT'),
+          elevated: withOpacity('--surface-elevated'),
         },
         // Alias of brand: kept so existing "info" usages (e.g. an in-progress
         // status) read as a calmer steel blue, distinct from the cyan accent.
-        info: {
-          50: '#EAF2F4',
-          100: '#D2E4E9',
-          500: '#245A73',
-          600: '#1D4A5F',
-        },
-        success: {
-          50: '#EAF7F1',
-          100: '#CDEEE0',
-          500: '#23845A',
-          600: '#1D6D4A',
-          700: '#175A3D',
-        },
-        danger: {
-          50: '#FBEEED',
-          100: '#F5D6D4',
-          500: '#C94A45',
-          600: '#B03934',
-          700: '#8E2E2A',
-        },
-        warning: {
-          50: '#FBF3E7',
-          100: '#F3E0BF',
-          500: '#C58B2A',
-          600: '#A8741F',
-          700: '#875C19',
-        },
+        info: ramp('info', [50, 100, 500, 600]),
+        success: ramp('success', [50, 100, 500, 600, 700]),
+        danger: ramp('danger', [50, 100, 500, 600, 700]),
+        warning: ramp('warning', [50, 100, 500, 600, 700]),
       },
       boxShadow: {
         xs: '0 1px 2px 0 rgba(23, 33, 38, 0.04)',

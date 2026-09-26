@@ -1,6 +1,7 @@
 import { eccentricLoadingReadings } from '../../../data/mockData'
 import { Button } from '../../../components/ui/Button'
 import { StatusBadge } from '../../../components/ui/StatusBadge'
+import { CalculationExplainer } from '../../../components/testing/CalculationExplainer'
 
 const POSITION_COORDS: Record<string, { x: number; y: number }> = {
   Center: { x: 110, y: 70 },
@@ -10,21 +11,45 @@ const POSITION_COORDS: Record<string, { x: number; y: number }> = {
   'Rear Right': { x: 180, y: 110 },
 }
 
+const FIRST_TESTED = eccentricLoadingReadings.find((r) => r.result !== 'NOT TESTED')
+const WORKED_EXAMPLE = FIRST_TESTED
+  ? `${FIRST_TESTED.position}: ${FIRST_TESTED.reading} − 2.000 kg = ${FIRST_TESTED.error}, within ${FIRST_TESTED.mpe} → ${FIRST_TESTED.result}`
+  : undefined
+
 export function EccentricLoadingTab() {
   return (
     <div className="space-y-5">
+      <CalculationExplainer
+        formula="Error = Reading − Applied Load"
+        passCondition="PASS when |Error| ≤ Permissible Error (MPE) for that load position"
+        example={WORKED_EXAMPLE}
+      />
+
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
         <div className="flex items-center justify-center rounded-xl border border-ink-200 bg-ink-50 p-4">
           <svg width="220" height="140" viewBox="0 0 220 140">
-            <rect x="20" y="10" width="180" height="120" rx="10" fill="#FFFFFF" stroke="#D7E0E3" strokeWidth="2" />
+            <rect x="20" y="10" width="180" height="120" rx="10" className="fill-surface stroke-ink-200" strokeWidth="2" />
             {eccentricLoadingReadings.map((row) => {
               const coord = POSITION_COORDS[row.position]
               if (!coord) return null
               const tested = row.result !== 'NOT TESTED'
               return (
                 <g key={row.position}>
-                  <circle cx={coord.x} cy={coord.y} r="14" fill={tested ? '#EAF7F1' : '#F1F4F5'} stroke={tested ? '#23845A' : '#C2CDD1'} strokeWidth="2" />
-                  <text x={coord.x} y={coord.y + 4} textAnchor="middle" fontSize="9" fontWeight="600" fill={tested ? '#175A3D' : '#9AA9AE'}>
+                  <circle
+                    cx={coord.x}
+                    cy={coord.y}
+                    r="14"
+                    strokeWidth="2"
+                    className={tested ? 'fill-success-50 stroke-success-500' : 'fill-ink-100 stroke-ink-300'}
+                  />
+                  <text
+                    x={coord.x}
+                    y={coord.y + 4}
+                    textAnchor="middle"
+                    fontSize="9"
+                    fontWeight="600"
+                    className={tested ? 'fill-success-700' : 'fill-ink-400'}
+                  >
                     {row.position === 'Center' ? 'C' : row.position.split(' ').map((w) => w[0]).join('')}
                   </text>
                 </g>

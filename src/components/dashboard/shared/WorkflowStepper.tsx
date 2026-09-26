@@ -16,7 +16,7 @@ export function WorkflowStepper({ title, subtitle, steps, currentIndex, delayMs 
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: delayMs / 1000, ease: [0.16, 1, 0.3, 1] }}
-      className="rounded-2xl border border-ink-200 bg-white p-5 shadow-card"
+      className="rounded-2xl border border-ink-200 bg-surface p-5 shadow-card"
     >
       <h3 className="text-sm font-semibold text-ink-900">{title}</h3>
       {subtitle && <p className="mt-0.5 text-xs text-ink-400">{subtitle}</p>}
@@ -35,7 +35,7 @@ export function WorkflowStepper({ title, subtitle, steps, currentIndex, delayMs 
                     'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold',
                     isDone && 'border-success-500 bg-success-500 text-white',
                     isCurrent && 'border-cyan-500 bg-cyan-50 text-cyan-700',
-                    !isDone && !isCurrent && 'border-ink-200 bg-white text-ink-400',
+                    !isDone && !isCurrent && 'border-ink-200 bg-surface text-ink-400',
                   )}
                 >
                   {isDone ? <Check className="h-4 w-4" strokeWidth={2.5} /> : index + 1}

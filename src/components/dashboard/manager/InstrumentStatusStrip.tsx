@@ -14,7 +14,7 @@ export function InstrumentStatusStrip() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
-      className="grid grid-cols-1 divide-y divide-ink-100 rounded-2xl border border-ink-200 bg-white shadow-card sm:grid-cols-3 sm:divide-x sm:divide-y-0"
+      className="grid grid-cols-1 divide-y divide-ink-100 rounded-2xl border border-ink-200 bg-surface shadow-card sm:grid-cols-3 sm:divide-x sm:divide-y-0"
     >
       {ITEMS.map((item) => (
         <div key={item.label} className="flex items-center gap-3 px-5 py-4">

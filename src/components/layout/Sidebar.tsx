@@ -1,9 +1,11 @@
-import { LogOut, X } from 'lucide-react'
+import { BookOpenCheck, ExternalLink, LogOut, X } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
 import { ROLE_NAV } from '../../auth/roles'
 import { cn } from '../../lib/utils'
 import { BrandLockup } from '../ui/BrandLockup'
+
+const OIML_R76_URL = 'https://www.oiml.org/en/files/pdf_r/r076-1-e06.pdf'
 
 interface SidebarProps {
   mobileOpen: boolean
@@ -26,7 +28,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
     <>
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-ink-900/40 backdrop-blur-[1px] lg:hidden"
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[1px] lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -34,7 +36,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex w-[264px] shrink-0 flex-col border-r border-ink-200 bg-white transition-transform duration-300 ease-out lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-50 flex w-[264px] shrink-0 flex-col border-r border-ink-200 bg-surface transition-transform duration-300 ease-out lg:translate-x-0',
           mobileOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
@@ -86,6 +88,21 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           ))}
         </nav>
 
+        {user.role === 'admin' && (
+          <div className="border-t border-ink-100 px-3 py-3">
+            <a
+              href={OIML_R76_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-ink-600 transition-colors hover:bg-ink-100 hover:text-ink-900"
+            >
+              <BookOpenCheck className="h-[18px] w-[18px] shrink-0 text-ink-400 group-hover:text-ink-600" strokeWidth={2} />
+              <span className="truncate">OIML Rules</span>
+              <ExternalLink className="ml-auto h-3.5 w-3.5 shrink-0 text-ink-400 group-hover:text-ink-600" strokeWidth={2} />
+            </a>
+          </div>
+        )}
+
         <div className="border-t border-ink-100 p-4">
           <div className="flex items-center gap-3 rounded-xl bg-ink-50 p-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-700 text-xs font-bold text-white">
@@ -100,7 +117,7 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
             <button
               type="button"
               onClick={handleLogout}
-              className="shrink-0 rounded-lg p-1.5 text-ink-400 hover:bg-white hover:text-danger-600"
+              className="shrink-0 rounded-lg p-1.5 text-ink-400 hover:bg-surface hover:text-danger-600"
               aria-label="Log out"
               title="Log out"
             >

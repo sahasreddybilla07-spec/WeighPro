@@ -30,7 +30,7 @@ export function AlertList({ title, items, delayMs = 0, className }: AlertListPro
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: delayMs / 1000, ease: [0.16, 1, 0.3, 1] }}
-      className={cn('rounded-2xl border border-ink-200 bg-white shadow-card', className)}
+      className={cn('rounded-2xl border border-ink-200 bg-surface shadow-card', className)}
     >
       <div className="flex items-center gap-2 border-b border-ink-100 px-5 py-4">
         <h3 className="text-sm font-semibold text-ink-900">{title}</h3>
