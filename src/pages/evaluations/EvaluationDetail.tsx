@@ -1,34 +1,43 @@
-import { CheckCircle2, FileText, Image as ImageIcon, RotateCcw } from 'lucide-react'
+import { CheckCircle2, RotateCcw } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
-import { allEvaluations, weighingPerformanceObservations } from '../../data/mockData'
+import { getEvaluationMeasurements, useAppData } from '../../context/AppDataContext'
 import { Button } from '../../components/ui/Button'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { TextArea } from '../../components/ui/FormSection'
 import { CalculationExplainer } from '../../components/testing/CalculationExplainer'
+import { localDateString } from '../../lib/utils'
 
 export function EvaluationDetail() {
   const { id } = useParams()
   const { user } = useAuth()
+  const { data, updateEvaluation } = useAppData()
   const navigate = useNavigate()
-  const evaluation = allEvaluations.find((e) => e.id === id) ?? allEvaluations[0]
+  const evaluation = data.evaluations.find((e) => e.id === id)
   const [comment, setComment] = useState('')
-  const [decision, setDecision] = useState<'approved' | 'returned' | null>(null)
 
-  const isReviewer = user?.role === 'reviewer' || user?.role === 'manager'
-  const isOwnEvaluation = user?.role === 'tester' && evaluation.tester === user.name
-  const canDecide = isReviewer && !decision && (evaluation.status === 'Under Review' || evaluation.status === 'Submitted')
+  if (!evaluation) return <div className="rounded-xl border border-ink-200 bg-surface p-8 text-center text-sm text-ink-500">Evaluation not found.</div>
+  const currentEvaluation = evaluation
 
-  // Illustrative observation data. When this evaluation's own tests are fully
-  // recorded, show completed placeholder readings instead of the sample's
-  // still-pending rows so the table doesn't contradict the header count.
-  const isFullyTested = evaluation.testsCompleted >= evaluation.testsTotal
-  const observations = weighingPerformanceObservations.map((row, idx) =>
-    isFullyTested && row.result === 'NOT TESTED'
-      ? { ...row, indicated: row.testLoad.replace(/(\d+\.\d+)/, (n) => (parseFloat(n) + 0.002 + idx * 0.001).toFixed(3)), error: '+0.002 kg', result: 'PASS' as const }
-      : row,
-  )
+  const isReviewer = user?.role === 'reviewer' && currentEvaluation.reviewer === user.name
+  const isDirector = user?.role === 'admin'
+  const isOwnEvaluation = user?.role === 'tester' && currentEvaluation.tester === user.name
+  const canDecide = isReviewer && (currentEvaluation.status === 'Under Review' || currentEvaluation.status === 'Submitted') && currentEvaluation.testsCompleted >= currentEvaluation.testsTotal && (currentEvaluation.result === 'PASS' || currentEvaluation.result === 'FAIL')
+  const canFinalize = isDirector && currentEvaluation.status === 'Approved'
+
+  const observations = getEvaluationMeasurements(data, evaluation.id).weighing
+
+  function decide(decision: 'approve' | 'return') {
+    const reviewedDate = localDateString()
+    updateEvaluation(currentEvaluation.id, decision === 'approve'
+      ? { status: 'Approved', result: currentEvaluation.result, reviewedDate, reviewerComments: comment }
+      : { status: 'Correction Required', result: currentEvaluation.result === 'NOT TESTED' ? 'PENDING' : currentEvaluation.result, reviewedDate, reviewerComments: comment })
+  }
+
+  function finalize() {
+    updateEvaluation(currentEvaluation.id, { status: 'Completed', reviewedDate: localDateString(), director: user?.name })
+  }
 
   return (
     <div className="space-y-6">
@@ -37,14 +46,14 @@ export function EvaluationDetail() {
           <div>
             <div className="flex items-center gap-2.5">
               <h2 className="font-mono text-lg font-bold text-ink-900">{evaluation.id}</h2>
-              <StatusBadge status={decision === 'approved' ? 'Approved' : decision === 'returned' ? 'Correction Required' : evaluation.status} />
+              <StatusBadge status={evaluation.status} />
               <StatusBadge status={evaluation.result} />
             </div>
             <p className="mt-1 text-sm text-ink-600">{evaluation.manufacturer} {evaluation.model} · Serial {evaluation.instrumentSerial}</p>
             <p className="mt-0.5 text-xs text-ink-400">{evaluation.lab}</p>
           </div>
           {isOwnEvaluation && evaluation.status === 'Testing' && (
-            <Button onClick={() => navigate('/testing')}>Continue Testing</Button>
+            <Button onClick={() => navigate(`/testing?evaluation=${encodeURIComponent(evaluation.id)}`)}>Continue Testing</Button>
           )}
         </div>
       </div>
@@ -74,6 +83,12 @@ export function EvaluationDetail() {
               ['Testing Technician', evaluation.tester],
               ['Legal Reviewer', evaluation.reviewer],
               ['Created', evaluation.createdDate],
+              ['Purpose', evaluation.purpose ?? '—'],
+              ['Test date', evaluation.testDate ?? '—'],
+              ['Applicant', evaluation.applicant ?? '—'],
+              ['Temperature', evaluation.temperature ? `${evaluation.temperature} °C` : '—'],
+              ['Relative humidity', evaluation.relativeHumidity ? `${evaluation.relativeHumidity} %` : '—'],
+              ['Reference standard', evaluation.referenceStandards ?? '—'],
               ['Submitted', evaluation.submittedDate ?? 'Not yet submitted'],
             ].map(([label, value]) => (
               <div key={label} className="flex items-center justify-between border-b border-ink-100 pb-2.5 last:border-0 last:pb-0">
@@ -124,44 +139,42 @@ export function EvaluationDetail() {
 
       <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
         <h3 className="text-sm font-semibold text-ink-900">Evidence &amp; Documents</h3>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-ink-200 bg-ink-50 px-2.5 py-1.5 text-xs text-ink-600">
-            <ImageIcon className="h-3.5 w-3.5 text-ink-400" /> instrument_setup.jpg
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-ink-200 bg-ink-50 px-2.5 py-1.5 text-xs text-ink-600">
-            <FileText className="h-3.5 w-3.5 text-ink-400" /> observation_sheet.pdf
-          </span>
-        </div>
+        <p className="mt-3 text-sm text-ink-500">No evidence files attached to this evaluation.</p>
       </div>
 
-      {isReviewer && (
+      {(isReviewer || isDirector) && (
         <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">
-          <h3 className="text-sm font-semibold text-ink-900">Legal Reviewer Decision</h3>
-          <p className="mt-0.5 text-xs text-ink-500">A testing technician cannot approve their own evaluation — only legal reviewers and lab managers can decide here.</p>
+          <h3 className="text-sm font-semibold text-ink-900">{isDirector ? 'Director Final Approval' : 'Legal Reviewer Decision'}</h3>
+          <p className="mt-0.5 text-xs text-ink-500">{isDirector ? 'Finalize the reviewer-approved evaluation for release.' : 'Review the submitted test record before forwarding it for director approval.'}</p>
           <TextArea
             className="mt-4"
             rows={3}
             placeholder="Add review comments (optional)…"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            disabled={!canDecide}
+            disabled={isDirector ? !canFinalize : !canDecide}
           />
-          {decision ? (
-            <div
-              className={`mt-4 flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium ${
-                decision === 'approved' ? 'bg-success-50 text-success-700' : 'bg-danger-50 text-danger-700'
-              }`}
-            >
-              {decision === 'approved' ? <CheckCircle2 className="h-4 w-4" /> : <RotateCcw className="h-4 w-4" />}
-              {decision === 'approved' ? 'Evaluation approved and sent to report generation.' : 'Evaluation returned to the tester for correction.'}
+            {isDirector && evaluation.status === 'Approved' ? (
+              <div className="mt-4 flex justify-end"><Button onClick={finalize}><CheckCircle2 className="h-4 w-4" />Approve Final Report</Button></div>
+            ) : isDirector ? (
+              <p className="mt-4 text-sm text-ink-500">{evaluation.status === 'Completed' ? 'Final approval recorded.' : 'Waiting for reviewer approval.'}</p>
+            ) : evaluation.status === 'Approved' || evaluation.status === 'Correction Required' || evaluation.status === 'Completed' ? (
+              <div
+                className={`mt-4 flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium ${
+                  evaluation.status === 'Approved' ? 'bg-success-50 text-success-700' : 'bg-danger-50 text-danger-700'
+                }`}
+              >
+                {evaluation.status === 'Approved' ? <CheckCircle2 className="h-4 w-4" /> : <RotateCcw className="h-4 w-4" />}
+                {evaluation.status === 'Approved' ? 'Reviewer approved. Awaiting director final approval.' : evaluation.status === 'Completed' ? 'Final report approved by the director.' : 'Evaluation returned to the tester for correction.'}
+                {evaluation.reviewerComments && <span className="ml-2">{evaluation.reviewerComments}</span>}
             </div>
           ) : (
             <div className="mt-4 flex justify-end gap-3">
-              <Button variant="secondary" disabled={!canDecide} onClick={() => setDecision('returned')}>
+              <Button variant="secondary" disabled={!canDecide} onClick={() => decide('return')}>
                 <RotateCcw className="h-4 w-4" />
                 Request Correction
               </Button>
-              <Button disabled={!canDecide} onClick={() => setDecision('approved')}>
+              <Button disabled={!canDecide} onClick={() => decide('approve')}>
                 <CheckCircle2 className="h-4 w-4" />
                 Approve Evaluation
               </Button>

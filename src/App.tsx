@@ -22,9 +22,10 @@ import { Users } from './pages/Users'
 import { OimlRules } from './pages/OimlRules'
 import { Settings } from './pages/Settings'
 import { AuditHistory } from './pages/AuditHistory'
+import { AppDataProvider } from './context/AppDataContext'
 import type { Role } from './auth/roles'
 
-const PLACEHOLDER_ROUTES: { path: string; title: string; element: JSX.Element }[] = [
+const APP_ROUTES: { path: string; title: string; element: JSX.Element }[] = [
   { path: '/instruments', title: 'Instruments', element: <InstrumentsList /> },
   { path: '/instruments/new', title: 'Register Instrument', element: <NewInstrument /> },
   { path: '/instruments/:id', title: 'Instrument Details', element: <InstrumentDetails /> },
@@ -76,7 +77,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      {PLACEHOLDER_ROUTES.map(({ path, title, element }) => (
+      {APP_ROUTES.map(({ path, title, element }) => (
         <Route
           key={path}
           path={path}
@@ -96,7 +97,9 @@ function AppRoutes() {
 export default function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <AppDataProvider>
+        <AppRoutes />
+      </AppDataProvider>
     </AuthProvider>
   )
 }

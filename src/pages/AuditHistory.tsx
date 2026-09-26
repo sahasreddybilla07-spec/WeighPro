@@ -1,7 +1,9 @@
-import { auditLog } from '../data/mockData'
+import { useAppData } from '../context/AppDataContext'
 import { TableCard } from '../components/dashboard/shared/TableCard'
 
 export function AuditHistory() {
+  const { data } = useAppData()
+  const auditLog = data.auditLog
   return (
     <div className="space-y-5">
       <TableCard title="Audit History" subtitle="System-wide record of who did what, and when">

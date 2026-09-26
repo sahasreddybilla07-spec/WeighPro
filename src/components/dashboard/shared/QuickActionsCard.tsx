@@ -24,11 +24,12 @@ export function QuickActionsCard({ actions, delayMs = 0.1 }: QuickActionsCardPro
     >
       <h3 className="text-sm font-semibold text-ink-900">Quick Actions</h3>
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {actions.map((action) => (
+        {actions.map((action, index) => (
           <Link
             key={action.label}
             to={action.to}
-            className="group flex flex-col gap-2.5 rounded-xl border border-ink-200 bg-ink-50 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300 hover:bg-surface hover:shadow-raised"
+            className="group animate-riseIn flex flex-col gap-2.5 rounded-xl border border-ink-200 bg-ink-50 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-300 hover:bg-surface hover:shadow-raised"
+            style={{ animationDelay: `${index * 70}ms` }}
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-surface text-brand-700 ring-1 ring-ink-200 transition-colors group-hover:bg-brand-700 group-hover:text-white group-hover:ring-brand-700">
               <action.icon className="h-[18px] w-[18px]" strokeWidth={2} />

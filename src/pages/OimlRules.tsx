@@ -1,8 +1,16 @@
 import { BookOpenCheck } from 'lucide-react'
-import { oimlRuleCategories } from '../data/mockData'
-import { StatusBadge } from '../components/ui/StatusBadge'
+import { useAppData } from '../context/AppDataContext'
+import { SelectInput, TextInput } from '../components/ui/FormSection'
+import { useEffect, useState } from 'react'
 
 export function OimlRules() {
+  const { data, updateRule } = useAppData()
+  const oimlRuleCategories = data.rules
+  const [drafts, setDrafts] = useState<Record<string, { description: string; mpeReference: string; version: string; status: 'Active' | 'Draft' }>>({})
+
+  useEffect(() => {
+    setDrafts(Object.fromEntries(oimlRuleCategories.map((rule) => [rule.category, { description: rule.description, mpeReference: rule.mpeReference, version: rule.version, status: rule.status }])))
+  }, [])
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-4 rounded-2xl border border-ink-200 bg-surface p-5 shadow-card">
@@ -33,13 +41,22 @@ export function OimlRules() {
           <tbody className="divide-y divide-ink-100">
             {oimlRuleCategories.map((rule) => (
               <tr key={rule.category}>
+                {(() => {
+                  const draft = drafts[rule.category] ?? rule
+                  const change = (key: keyof typeof draft, value: string) => setDrafts((current) => ({ ...current, [rule.category]: { ...draft, [key]: value } }))
+                  const save = () => updateRule(rule.category, draft)
+                  return <>
                 <td className="whitespace-nowrap px-5 py-3.5 text-sm font-medium text-ink-900">{rule.category}</td>
-                <td className="max-w-xs px-5 py-3.5 text-sm text-ink-600">{rule.description}</td>
-                <td className="max-w-xs px-5 py-3.5 text-xs text-ink-400">{rule.mpeReference}</td>
-                <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs text-ink-500">{rule.version}</td>
+                <td className="min-w-[240px] px-3 py-2"><TextInput aria-label={`${rule.category} description`} value={draft.description} onChange={(event) => change('description', event.target.value)} onBlur={save} /></td>
+                <td className="min-w-[260px] px-3 py-2"><TextInput aria-label={`${rule.category} MPE reference`} value={draft.mpeReference} onChange={(event) => change('mpeReference', event.target.value)} onBlur={save} /></td>
+                <td className="min-w-[190px] px-3 py-2"><TextInput aria-label={`${rule.category} version`} value={draft.version} onChange={(event) => change('version', event.target.value)} onBlur={save} /></td>
                 <td className="whitespace-nowrap px-5 py-3.5">
-                  <StatusBadge status={rule.status === 'Active' ? 'Approved' : 'Draft'} />
+                  <SelectInput aria-label={`${rule.category} status`} className="w-28" value={draft.status} onChange={(event) => { change('status', event.target.value); updateRule(rule.category, { status: event.target.value as 'Active' | 'Draft' }) }}>
+                    <option>Active</option><option>Draft</option>
+                  </SelectInput>
                 </td>
+                  </>
+                })()}
               </tr>
             ))}
           </tbody>

@@ -49,7 +49,7 @@ export function Settings() {
                 <Field label="Organization Name"><TextInput defaultValue="Ministry of Consumer Affairs, Food & Public Distribution" /></Field>
                 <Field label="Department"><TextInput defaultValue="Department of Consumer Affairs (DoCA)" /></Field>
                 <Field label="Primary Laboratory"><TextInput defaultValue={user?.laboratory ?? ''} /></Field>
-                <Field label="Contact Email"><TextInput type="email" defaultValue="labops@weighpro.gov.in" /></Field>
+                <Field label="Contact Email"><TextInput type="email" defaultValue="labops@weighmetric.gov.in" /></Field>
               </div>
             </div>
           )}
@@ -116,7 +116,7 @@ export function Settings() {
               <h3 className="text-sm font-semibold text-ink-900">System Configuration</h3>
               <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {[
-                  ['Application Version', 'WEIGHPRO v0.9.0 (Prototype)'],
+                  ['Application Version', 'WeighMetric v0.9.0 (Prototype)'],
                   ['Active OIML Ruleset', 'R-76-1:2006 (Rev. 2020)'],
                   ['Environment', 'SIH Demonstration'],
                   ['Last System Update', '2026-09-18'],

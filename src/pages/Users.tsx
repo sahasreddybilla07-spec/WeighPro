@@ -1,6 +1,7 @@
 import { Search, UserPlus } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { usersList } from '../data/mockData'
+import type { UserRecord } from '../data/mockData'
+import { useAppData } from '../context/AppDataContext'
 import { Button } from '../components/ui/Button'
 import { Field, SelectInput, TextInput } from '../components/ui/FormSection'
 import { Modal } from '../components/ui/Modal'
@@ -8,9 +9,14 @@ import { StatusBadge } from '../components/ui/StatusBadge'
 import { TableCard } from '../components/dashboard/shared/TableCard'
 
 export function Users() {
+  const { data, addUser, updateUser } = useAppData()
+  const usersList = data.users
   const [query, setQuery] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
-  const [statuses, setStatuses] = useState<Record<string, 'Active' | 'Inactive'>>({})
+  const [name, setName] = useState('')
+  const [role, setRole] = useState<UserRecord['role']>('Testing Technician')
+  const laboratories = [...new Set([...data.users.map((user) => user.laboratory), ...data.instruments.map((instrument) => instrument.lab)])]
+  const [laboratory, setLaboratory] = useState(laboratories[0] ?? '')
 
   const rows = useMemo(
     () => usersList.filter((u) => !query || u.name.toLowerCase().includes(query.toLowerCase()) || u.laboratory.toLowerCase().includes(query.toLowerCase())),
@@ -18,7 +24,14 @@ export function Users() {
   )
 
   function toggleStatus(id: string, current: 'Active' | 'Inactive') {
-    setStatuses((s) => ({ ...s, [id]: current === 'Active' ? 'Inactive' : 'Active' }))
+    updateUser(id, { status: current === 'Active' ? 'Inactive' : 'Active' })
+  }
+
+  function handleAddUser() {
+    if (!name.trim() || !laboratory) return
+    addUser({ name: name.trim(), role, laboratory, status: 'Active' })
+    setName('')
+    setModalOpen(false)
   }
 
   return (
@@ -52,7 +65,8 @@ export function Users() {
           </thead>
           <tbody className="divide-y divide-ink-100">
             {rows.map((u) => {
-              const status = statuses[u.id] ?? u.status
+              const status = u.status
+              const assigned = data.evaluations.filter((evaluation) => evaluation.tester === u.name && !['Approved', 'Completed'].includes(evaluation.status)).length
               return (
                 <tr key={u.id} className="transition-colors hover:bg-ink-50/70">
                   <td className="whitespace-nowrap px-5 py-3.5 text-sm font-medium text-ink-900">{u.name}</td>
@@ -62,7 +76,7 @@ export function Users() {
                     <StatusBadge status={status} />
                   </td>
                   <td className="whitespace-nowrap px-5 py-3.5 text-sm text-ink-500">{u.lastActivity}</td>
-                  <td className="whitespace-nowrap px-5 py-3.5 font-mono text-sm text-ink-600">{u.assignedEvaluations}</td>
+                  <td className="whitespace-nowrap px-5 py-3.5 font-mono text-sm text-ink-600">{assigned}</td>
                   <td className="whitespace-nowrap px-5 py-3.5 text-right">
                     <button
                       type="button"
@@ -83,34 +97,28 @@ export function Users() {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         title="Add User"
-        description="Create a new WEIGHPRO account and assign a role"
+        description="Create a new WeighMetric account and assign a role"
         footer={
           <>
             <Button variant="secondary" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={() => setModalOpen(false)}>Add User</Button>
+            <Button onClick={handleAddUser} disabled={!name.trim() || !laboratory}>Add User</Button>
           </>
         }
       >
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Full Name" full>
-            <TextInput placeholder="e.g. Neha Kapoor" />
+            <TextInput value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Neha Kapoor" required />
           </Field>
           <Field label="Role">
-            <SelectInput>
-              <option>Director</option>
-              <option>Lab Manager</option>
-              <option>Testing Technician</option>
-              <option>Legal Reviewer</option>
+            <SelectInput value={role} onChange={(event) => setRole(event.target.value as UserRecord['role'])}>
+              {['Director', 'Lab Manager', 'Testing Technician', 'Legal Reviewer'].map((item) => <option key={item}>{item}</option>)}
             </SelectInput>
           </Field>
           <Field label="Laboratory">
-            <SelectInput>
-              <option>Regional Reference Standards Laboratory, Bengaluru</option>
-              <option>National Test House, Kolkata</option>
-              <option>State Reference Standards Laboratory, Pune</option>
-              <option>Legal Metrology Laboratory, Chennai</option>
+            <SelectInput value={laboratory} onChange={(event) => setLaboratory(event.target.value)}>
+              {laboratories.map((item) => <option key={item}>{item}</option>)}
             </SelectInput>
           </Field>
         </div>

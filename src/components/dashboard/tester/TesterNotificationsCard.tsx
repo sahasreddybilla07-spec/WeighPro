@@ -1,9 +1,11 @@
 import { motion } from 'framer-motion'
 import { Bell } from 'lucide-react'
-import { testerNotifications } from '../../../data/mockData'
+import { useAppData } from '../../../context/AppDataContext'
 import { cn } from '../../../lib/utils'
 
 export function TesterNotificationsCard() {
+  const { data } = useAppData()
+  const testerNotifications = data.notifications.slice(0, 5)
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}

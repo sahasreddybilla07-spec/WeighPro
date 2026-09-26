@@ -1,6 +1,7 @@
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { myEvaluations } from '../../../data/mockData'
+import { useAuth } from '../../../auth/AuthContext'
+import { useAppData } from '../../../context/AppDataContext'
 import { StatusBadge } from '../../ui/StatusBadge'
 import { TableCard } from '../shared/TableCard'
 
@@ -13,6 +14,15 @@ const ACTION_LABEL: Record<string, string> = {
 }
 
 export function MyEvaluationsTable() {
+  const { data } = useAppData()
+  const { user } = useAuth()
+  const myEvaluations = data.evaluations.filter((evaluation) => evaluation.tester === user?.name).map((evaluation) => ({
+    evaluationId: evaluation.id,
+    instrument: `${evaluation.instrumentType} · ${evaluation.model}`,
+    progress: `${evaluation.testsCompleted} / ${evaluation.testsTotal} tests`,
+    progressFraction: evaluation.testsTotal ? evaluation.testsCompleted / evaluation.testsTotal : 0,
+    status: evaluation.status,
+  }))
   return (
     <TableCard title="My Evaluations" subtitle="Everything assigned to you, in progress or awaiting action" delayMs={0.2}>
       <table className="w-full min-w-[620px] border-collapse text-left">
@@ -55,6 +65,7 @@ export function MyEvaluationsTable() {
               </td>
             </tr>
           ))}
+          {myEvaluations.length === 0 && <tr><td colSpan={5} className="px-5 py-10 text-center text-sm text-ink-500">No evaluations are assigned to you yet.</td></tr>}
         </tbody>
       </table>
     </TableCard>

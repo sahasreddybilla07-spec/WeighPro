@@ -1,4 +1,4 @@
-// Realistic mock data for the WEIGHPRO role-based dashboards.
+// Realistic mock data for the WeighMetric role-based dashboards.
 // Kept separate from UI components so it can be swapped for live API data later.
 // Numbers are cross-consistent: lab-level rows sum to the admin's system-wide metrics.
 
@@ -6,6 +6,7 @@ export interface Instrument {
   id: string
   serial: string
   manufacturer: string
+  manufacturerAddress?: string
   model: string
   type: string
   status: 'Active' | 'Under Testing' | 'Due for Verification' | 'Decommissioned'
@@ -18,6 +19,7 @@ export interface Instrument {
   registrationDate: string
   lastEvaluation: string | null
   nextVerification: string
+  documents?: string[]
 }
 
 export const instruments: Instrument[] = [
@@ -314,6 +316,15 @@ export interface EvaluationRecord {
   reviewedDate: string | null
   testsCompleted: number
   testsTotal: number
+  purpose?: string
+  applicant?: string
+  testDate?: string
+  temperature?: string
+  relativeHumidity?: string
+  atmosphericPressure?: string
+  referenceStandards?: string
+  reviewerComments?: string
+  director?: string
 }
 
 export const allEvaluations: EvaluationRecord[] = [

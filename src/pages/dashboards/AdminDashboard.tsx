@@ -4,32 +4,39 @@ import { AlertList } from '../../components/dashboard/shared/AlertList'
 import { ActivityFeed } from '../../components/dashboard/shared/ActivityFeed'
 import { PipelineBarChart } from '../../components/dashboard/shared/PipelineBarChart'
 import { SectionHeading } from '../../components/dashboard/shared/SectionHeading'
+import { DashboardHero } from '../../components/dashboard/shared/DashboardHero'
 import { LaboratoryOverviewTable } from '../../components/dashboard/admin/LaboratoryOverviewTable'
 import { UserOverviewCard } from '../../components/dashboard/admin/UserOverviewCard'
 import { TesterWorkloadTable } from '../../components/dashboard/manager/TesterWorkloadTable'
 import { ComplianceSummaryBar } from '../../components/dashboard/reviewer/ComplianceSummaryBar'
 import { MetricCard } from '../../components/ui/MetricCard'
-import { adminPipeline, adminRecentActivity, systemAlerts } from '../../data/mockData'
-import {
-  averageEvaluationDays,
-  completionRatePct,
-  compliancePct,
-  criticalAlertCount,
-  evaluationsNeedingCorrection,
-  instrumentsDueForVerification,
-  pendingApprovals,
-  pendingReviewCount,
-  todayFormatted,
-  totalEvaluations,
-} from '../../lib/directorMetrics'
+import { useAppData } from '../../context/AppDataContext'
+import { getLabOverview, getPipeline, getSystemAlerts, getWorkload, isComplete } from '../../lib/dataSelectors'
+import { todayFormatted } from '../../lib/directorMetrics'
 
 export function AdminDashboard() {
-  const pendingReviews = pendingReviewCount()
-  const dueForVerification = instrumentsDueForVerification()
-  const needingCorrection = evaluationsNeedingCorrection()
+  const { data } = useAppData()
+  const pendingReviews = data.evaluations.filter((row) => row.status === 'Under Review').length
+  const dueForVerification = data.instruments.filter((row) => row.status !== 'Decommissioned' && new Date(`${row.nextVerification}T00:00:00`).getTime() <= Date.now() + 30 * 86400000).length
+  const needingCorrection = data.evaluations.filter((row) => row.status === 'Correction Required').length
+  const completed = data.evaluations.filter(isComplete).length
+  const tested = data.evaluations.filter((row) => row.result === 'PASS' || row.result === 'FAIL')
+  const passCount = tested.filter((row) => row.result === 'PASS').length
+  const correctionCount = data.evaluations.filter((row) => row.status === 'Correction Required').length
+  const failedCount = tested.filter((row) => row.result === 'FAIL').length
+  const complianceTotal = passCount + failedCount + correctionCount
+  const compliance = complianceTotal ? Math.round((passCount / complianceTotal) * 100) : 0
+  const reviewedDays = data.evaluations.filter((row) => row.reviewedDate).map((row) => (new Date(row.reviewedDate!).getTime() - new Date(row.createdDate).getTime()) / 86400000)
+  const averageDays = reviewedDays.length ? Math.round(reviewedDays.reduce((a, b) => a + b, 0) / reviewedDays.length) : 0
+  const pipeline = getPipeline(data)
+  const alerts = getSystemAlerts(data)
+  const labOverview = getLabOverview(data)
+  const workload = getWorkload(data)
+  const users = data.users.filter((row) => row.status === 'Active').length
 
   return (
     <div className="space-y-8">
+      <DashboardHero />
       {/* Executive snapshot */}
       <div>
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -40,15 +47,15 @@ export function AdminDashboard() {
           </span>
         </div>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          <MetricCard title="Evaluations" value={totalEvaluations()} icon={ClipboardCheck} tone="brand" context="Active + completed, all labs" delayMs={0} />
-          <MetricCard title="Compliance" value={Math.round(compliancePct())} suffix="%" icon={ShieldCheck} tone="success" context="Pass rate, all evaluations" delayMs={60} />
-          <MetricCard title="Pending Approvals" value={pendingApprovals()} icon={RotateCcw} tone="warning" context="Awaiting reviewer action" delayMs={120} />
-          <MetricCard title="Critical Alerts" value={criticalAlertCount()} icon={AlertTriangle} tone="danger" context="Need Director attention" delayMs={180} />
+          <MetricCard title="Evaluations" value={data.evaluations.length} icon={ClipboardCheck} tone="brand" context={`${completed} approved or completed`} delayMs={0} />
+          <MetricCard title="Compliance" value={compliance} suffix="%" icon={ShieldCheck} tone="success" context="Pass rate of decided evaluations" delayMs={60} />
+          <MetricCard title="Pending Approvals" value={pendingReviews} icon={RotateCcw} tone="warning" context="Awaiting reviewer action" delayMs={120} />
+          <MetricCard title="Critical Alerts" value={alerts.length} icon={AlertTriangle} tone="danger" context="Require operational attention" delayMs={180} />
         </div>
       </div>
 
       {/* Highest priority: what needs attention right now */}
-      <AlertList title="Alerts & Escalations" items={systemAlerts} delayMs={0.1} />
+      <AlertList title="Alerts & Escalations" items={alerts} delayMs={0.1} />
 
       {/* Pending actions + compliance, side by side */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
@@ -104,6 +111,7 @@ export function AdminDashboard() {
         <ComplianceSummaryBar
           title="Compliance Overview"
           subtitle="Outcomes across all evaluations"
+          summary={{ pass: passCount, fail: failedCount, correctionRequired: correctionCount }}
           action={
             <Link to="/reports" className="inline-flex items-center gap-1 text-xs font-semibold text-brand-600 hover:text-brand-700">
               View Details
@@ -117,7 +125,7 @@ export function AdminDashboard() {
       <PipelineBarChart
         title="Evaluation Performance"
         subtitle="Current evaluation volume by pipeline stage, across all laboratories"
-        data={adminPipeline}
+        data={pipeline}
         delayMs={0.2}
       />
 
@@ -126,22 +134,22 @@ export function AdminDashboard() {
         <SectionHeading eyebrow="Operations" title="Lab Performance" subtitle="Technician workload and throughput across the testing team" />
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_1.4fr]">
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-1">
-            <MetricCard title="Completion Rate" value={Math.round(completionRatePct())} suffix="%" icon={Boxes} tone="success" context="Completed vs. active evaluations" delayMs={0} />
-            <MetricCard title="Avg. Evaluation Time" value={Math.round(averageEvaluationDays())} suffix=" days" icon={Users} tone="cyan" context="Days from creation to review" delayMs={60} />
+            <MetricCard title="Completion Rate" value={data.evaluations.length ? Math.round((completed / data.evaluations.length) * 100) : 0} suffix="%" icon={Boxes} tone="success" context="Approved or completed evaluations" delayMs={0} />
+            <MetricCard title="Avg. Evaluation Time" value={averageDays} suffix=" days" icon={Users} tone="cyan" context="Days from creation to review" delayMs={60} />
           </div>
-          <TesterWorkloadTable />
+          <TesterWorkloadTable rows={workload} />
         </div>
       </div>
 
       {/* Secondary: broader system overview */}
       <div>
-        <SectionHeading eyebrow="Overview" title="Laboratory & System Detail" muted />
+          <SectionHeading eyebrow="Overview" title="Laboratory & System Detail" muted />
         <div className="space-y-6">
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.6fr_1fr]">
-            <LaboratoryOverviewTable />
-            <UserOverviewCard />
+            <LaboratoryOverviewTable rows={labOverview} />
+            <UserOverviewCard users={users} testers={data.users.filter((row) => row.status === 'Active' && row.role === 'Testing Technician').length} reviewers={data.users.filter((row) => row.status === 'Active' && row.role === 'Legal Reviewer').length} labManagers={data.users.filter((row) => row.status === 'Active' && row.role === 'Lab Manager').length} />
           </div>
-          <ActivityFeed title="Recent Activity" subtitle="Compact system-wide log" items={adminRecentActivity} maxHeightPx={260} delayMs={0.1} />
+          <ActivityFeed title="Recent Activity" subtitle="Compact system-wide log" items={data.activity} maxHeightPx={260} delayMs={0.1} />
         </div>
       </div>
     </div>

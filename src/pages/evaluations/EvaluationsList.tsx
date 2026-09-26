@@ -1,7 +1,7 @@
 import { ChevronRight, FilePlus2, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { allEvaluations } from '../../data/mockData'
+import { useAppData } from '../../context/AppDataContext'
 import { Button } from '../../components/ui/Button'
 import { SelectInput } from '../../components/ui/FormSection'
 import { StatusBadge } from '../../components/ui/StatusBadge'
@@ -10,6 +10,8 @@ import { TableCard } from '../../components/dashboard/shared/TableCard'
 const STATUSES = ['All Statuses', 'Draft', 'Assigned', 'Testing', 'Submitted', 'Under Review', 'Correction Required', 'Approved', 'Completed']
 
 export function EvaluationsList() {
+  const { data } = useAppData()
+  const allEvaluations = data.evaluations
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('All Statuses')
 
@@ -25,7 +27,7 @@ export function EvaluationsList() {
           e.manufacturer.toLowerCase().includes(query.toLowerCase()) ||
           e.model.toLowerCase().includes(query.toLowerCase()),
       )
-  }, [query, status])
+  }, [allEvaluations, query, status])
 
   return (
     <div className="space-y-5">

@@ -1,16 +1,18 @@
 import { ChevronRight, PackagePlus, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { instruments } from '../../data/mockData'
+import { useAppData } from '../../context/AppDataContext'
 import { Button } from '../../components/ui/Button'
 import { SelectInput } from '../../components/ui/FormSection'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { TableCard } from '../../components/dashboard/shared/TableCard'
 
-const TYPES = ['All Types', ...Array.from(new Set(instruments.map((i) => i.type)))]
 const STATUSES = ['All Statuses', 'Active', 'Under Testing', 'Due for Verification', 'Decommissioned']
 
 export function InstrumentsList() {
+  const { data } = useAppData()
+  const instruments = data.instruments
+  const TYPES = ['All Types', ...Array.from(new Set(instruments.map((i) => i.type)))]
   const [query, setQuery] = useState('')
   const [type, setType] = useState('All Types')
   const [status, setStatus] = useState('All Statuses')
@@ -27,7 +29,7 @@ export function InstrumentsList() {
       const matchesStatus = status === 'All Statuses' || inst.status === status
       return matchesQuery && matchesType && matchesStatus
     })
-  }, [query, type, status])
+  }, [instruments, query, type, status])
 
   return (
     <div className="space-y-5">

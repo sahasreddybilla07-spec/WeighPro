@@ -5,9 +5,13 @@ import { ActivityFeed } from '../../components/dashboard/shared/ActivityFeed'
 import { QuickActionsCard } from '../../components/dashboard/shared/QuickActionsCard'
 import type { QuickAction } from '../../components/dashboard/shared/QuickActionsCard'
 import { SectionHeading } from '../../components/dashboard/shared/SectionHeading'
+import { DashboardHero } from '../../components/dashboard/shared/DashboardHero'
 import { ComplianceSummaryBar } from '../../components/dashboard/reviewer/ComplianceSummaryBar'
 import { MetricCard } from '../../components/ui/MetricCard'
-import { recentDecisions, reviewWorkflowCurrentIndex, reviewWorkflowSteps, reviewerMetrics } from '../../data/mockData'
+import { reviewWorkflowSteps } from '../../data/mockData'
+import { useAppData } from '../../context/AppDataContext'
+import { localDateString } from '../../lib/utils'
+import { useAuth } from '../../auth/AuthContext'
 
 const QUICK_ACTIONS: QuickAction[] = [
   { label: 'Review Evaluation', description: 'Open the next evaluation awaiting review', icon: ShieldCheck, to: '/reviews' },
@@ -16,8 +20,23 @@ const QUICK_ACTIONS: QuickAction[] = [
 ]
 
 export function ReviewerDashboard() {
+  const { data } = useAppData()
+  const { user } = useAuth()
+  const reviews = data.evaluations.filter((row) => row.status === 'Under Review' && row.reviewer === user?.name)
+  const corrections = data.evaluations.filter((row) => row.status === 'Correction Required' && row.reviewer === user?.name)
+  const reviewed = data.evaluations.filter((row) => row.reviewer === user?.name && (row.status === 'Approved' || row.status === 'Completed' || row.status === 'Correction Required'))
+  const reviewerMetrics = {
+    pendingReviews: reviews.length,
+    dueToday: reviews.filter((row) => row.submittedDate === localDateString()).length,
+    returned: corrections.length,
+    approved: reviewed.filter((row) => row.result === 'PASS' && row.status !== 'Correction Required').length,
+    failed: reviewed.filter((row) => row.result === 'FAIL').length,
+  }
+  const decisions = data.activity.filter((row) => row.type === 'approved' || row.type === 'correction' || row.type === 'report')
+  const selectedReview = reviews[0]
   return (
     <div className="space-y-8">
+      <DashboardHero />
       {/* Primary work: reviews awaiting your decision */}
       <div>
         <SectionHeading eyebrow="Your Work" title="Awaiting Your Review" subtitle="Evaluations submitted by testers, pending your decision" />
@@ -25,9 +44,9 @@ export function ReviewerDashboard() {
           <PendingReviewTable title="Pending Review Queue" subtitle="Evaluations awaiting your review" delayMs={0.16} />
           <WorkflowStepper
             title="Review Status"
-            subtitle="EV-2026-0142 · Electronic Platform Scale ABC-100"
+            subtitle={selectedReview ? `${selectedReview.id} · ${selectedReview.instrumentType} ${selectedReview.model}` : 'No evaluation is currently under review'}
             steps={reviewWorkflowSteps}
-            currentIndex={reviewWorkflowCurrentIndex}
+            currentIndex={selectedReview ? 1 : 0}
             delayMs={0.24}
           />
         </div>
@@ -46,8 +65,8 @@ export function ReviewerDashboard() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <ComplianceSummaryBar />
-        <ActivityFeed title="Recent Decisions" subtitle="Your latest review outcomes" items={recentDecisions} maxHeightPx={220} delayMs={0.34} />
+        <ComplianceSummaryBar summary={{ pass: reviewerMetrics.approved, fail: reviewerMetrics.failed, correctionRequired: reviewerMetrics.returned }} />
+        <ActivityFeed title="Recent Decisions" subtitle="Your latest review outcomes" items={decisions} maxHeightPx={220} delayMs={0.34} />
       </div>
 
       <QuickActionsCard actions={QUICK_ACTIONS} delayMs={0.42} />

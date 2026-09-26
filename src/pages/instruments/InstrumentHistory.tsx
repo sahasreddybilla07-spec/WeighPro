@@ -1,11 +1,13 @@
 import { FileText, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { allEvaluations } from '../../data/mockData'
+import { useAppData } from '../../context/AppDataContext'
 import { TableCard } from '../../components/dashboard/shared/TableCard'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 
 export function InstrumentHistory() {
+  const { data } = useAppData()
+  const allEvaluations = data.evaluations
   const [query, setQuery] = useState('')
 
   const rows = useMemo(() => {
@@ -19,7 +21,7 @@ export function InstrumentHistory() {
         e.model.toLowerCase().includes(query.toLowerCase()) ||
         e.tester.toLowerCase().includes(query.toLowerCase()),
     )
-  }, [query])
+  }, [allEvaluations, query])
 
   return (
     <div className="space-y-5">

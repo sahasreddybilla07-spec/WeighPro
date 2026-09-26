@@ -1,35 +1,43 @@
 import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { useTheme } from '../../../context/ThemeContext'
-import { complianceSummary } from '../../../data/mockData'
+import { useAppData } from '../../../context/AppDataContext'
 
 // Mirrors the success/danger/warning "500" step from src/index.css so this
 // hand-colored bar stays in sync with the rest of the semantic palette.
 const SEGMENT_COLORS = {
-  light: { pass: '#23845A', fail: '#C94A45', correctionRequired: '#C58B2A' },
-  dark: { pass: '#3FC088', fail: '#F0655C', correctionRequired: '#E3A83D' },
+  light: { pass: '#16864E', fail: '#D74752', correctionRequired: '#D88A0B' },
+  dark: { pass: '#50D794', fail: '#FF7B7F', correctionRequired: '#F2BB45' },
 }
-
-const total = complianceSummary.pass + complianceSummary.fail + complianceSummary.correctionRequired
 
 interface ComplianceSummaryBarProps {
   title?: string
   subtitle?: string
   action?: ReactNode
+  summary?: { pass: number; fail: number; correctionRequired: number }
 }
 
 export function ComplianceSummaryBar({
   title = 'Compliance Summary',
   subtitle = 'Outcomes of your reviewed evaluations',
   action,
+  summary,
 }: ComplianceSummaryBarProps) {
   const { theme } = useTheme()
+  const { data } = useAppData()
   const colors = SEGMENT_COLORS[theme]
+  const evaluated = data.evaluations.filter((row) => row.result === 'PASS' || row.result === 'FAIL')
+  const counts = summary ?? {
+    pass: evaluated.filter((row) => row.result === 'PASS').length,
+    fail: evaluated.filter((row) => row.result === 'FAIL').length,
+    correctionRequired: data.evaluations.filter((row) => row.status === 'Correction Required').length,
+  }
   const SEGMENTS = [
-    { label: 'PASS', value: complianceSummary.pass, color: colors.pass },
-    { label: 'FAIL', value: complianceSummary.fail, color: colors.fail },
-    { label: 'CORRECTION REQUIRED', value: complianceSummary.correctionRequired, color: colors.correctionRequired },
+    { label: 'PASS', value: counts.pass, color: colors.pass },
+    { label: 'FAIL', value: counts.fail, color: colors.fail },
+    { label: 'CORRECTION REQUIRED', value: counts.correctionRequired, color: colors.correctionRequired },
   ]
+  const total = SEGMENTS.reduce((sum, segment) => sum + segment.value, 0) || 1
 
   return (
     <motion.div

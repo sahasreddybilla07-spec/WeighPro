@@ -1,10 +1,12 @@
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { allEvaluations } from '../data/mockData'
+import { useAppData } from '../context/AppDataContext'
 import { TableCard } from '../components/dashboard/shared/TableCard'
 import { StatusBadge } from '../components/ui/StatusBadge'
 
 export function TestResults() {
+  const { data } = useAppData()
+  const allEvaluations = data.evaluations
   const rows = [...allEvaluations].sort((a, b) => b.id.localeCompare(a.id))
 
   return (

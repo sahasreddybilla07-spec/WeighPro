@@ -1,2 +1,2 @@
-# WeighPro
+# WeighMetric
 2nd SIH

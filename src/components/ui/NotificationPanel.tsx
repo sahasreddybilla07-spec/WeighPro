@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { Bell } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { notifications } from '../../data/mockData'
+import { useAppData } from '../../context/AppDataContext'
 import { cn } from '../../lib/utils'
 
 export function NotificationPanel() {
+  const { data } = useAppData()
+  const notifications = data.notifications
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const unreadCount = notifications.filter((n) => !n.read).length

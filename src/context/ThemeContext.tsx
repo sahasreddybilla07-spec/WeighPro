@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 
 export type Theme = 'light' | 'dark'
 
-const STORAGE_KEY = 'weighpro-theme'
+const STORAGE_KEY = 'weighmetric-theme'
 
 interface ThemeContextValue {
   theme: Theme
@@ -24,7 +24,7 @@ function readInitialTheme(): Theme {
   } catch {
     // localStorage unavailable — fall through to default
   }
-  return 'dark'
+  return 'light'
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

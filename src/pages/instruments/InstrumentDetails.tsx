@@ -1,6 +1,7 @@
-import { FileText, Image as ImageIcon, MapPin, ScrollText } from 'lucide-react'
+import { FileText, Image as ImageIcon, MapPin, Pencil, ScrollText } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
-import { allEvaluations, instruments } from '../../data/mockData'
+import { useAppData } from '../../context/AppDataContext'
+import { useState } from 'react'
 import { ActivityFeed } from '../../components/dashboard/shared/ActivityFeed'
 import { TableCard } from '../../components/dashboard/shared/TableCard'
 import { Button } from '../../components/ui/Button'
@@ -8,7 +9,14 @@ import { StatusBadge } from '../../components/ui/StatusBadge'
 
 export function InstrumentDetails() {
   const { id } = useParams()
-  const instrument = instruments.find((i) => i.id === id) ?? instruments[0]
+  const { data, updateInstrument } = useAppData()
+  const instruments = data.instruments
+  const allEvaluations = data.evaluations
+  const instrument = instruments.find((i) => i.id === id)
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState<Partial<import('../../data/mockData').Instrument>>({})
+
+  if (!instrument) return <div className="rounded-xl border border-ink-200 bg-surface p-8 text-center text-sm text-ink-500">Instrument not found.</div>
   const history = allEvaluations.filter((e) => e.instrumentId === instrument.id)
 
   const activity = history.slice(0, 4).map((e) => ({
@@ -38,11 +46,20 @@ export function InstrumentDetails() {
               {instrument.location} · {instrument.lab}
             </p>
           </div>
-          <Link to="/evaluations/new">
-            <Button>Start Evaluation</Button>
-          </Link>
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={() => { setDraft(instrument); setEditing((value) => !value) }}><Pencil className="h-4 w-4" />{editing ? 'Close edit' : 'Edit instrument'}</Button>
+            <Link to={`/evaluations/new?instrument=${encodeURIComponent(instrument.id)}`}><Button>Start Evaluation</Button></Link>
+          </div>
         </div>
       </div>
+
+      {editing && <form className="grid grid-cols-1 gap-4 rounded-xl border border-brand-200 bg-surface p-5 shadow-card sm:grid-cols-2" onSubmit={(event) => { event.preventDefault(); updateInstrument(instrument.id, draft); setEditing(false) }}>
+        {([
+          ['manufacturer', 'Manufacturer'], ['model', 'Model'], ['serial', 'Serial number'], ['capacity', 'Capacity'], ['scaleInterval', 'Verification interval (e)'], ['accuracyClass', 'Accuracy class'], ['location', 'Location'], ['owner', 'Owner / applicant'], ['lab', 'Laboratory'], ['nextVerification', 'Next verification date'],
+        ] as const).map(([key, label]) => <label key={key} className="text-xs font-semibold text-ink-500">{label}<input required className="mt-1 block w-full rounded-lg border border-ink-200 bg-surface px-3 py-2.5 text-sm font-normal text-ink-900" value={draft[key] ?? ''} onChange={(event) => setDraft((current) => ({ ...current, [key]: event.target.value }))} /></label>)}
+        <label className="text-xs font-semibold text-ink-500">Status<select className="mt-1 block w-full rounded-lg border border-ink-200 bg-surface px-3 py-2.5 text-sm font-normal text-ink-900" value={draft.status ?? instrument.status} onChange={(event) => setDraft((current) => ({ ...current, status: event.target.value as typeof instrument.status }))}>{['Active', 'Under Testing', 'Due for Verification', 'Decommissioned'].map((status) => <option key={status}>{status}</option>)}</select></label>
+        <div className="flex items-end justify-end"><Button type="submit">Save instrument details</Button></div>
+      </form>}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-card">

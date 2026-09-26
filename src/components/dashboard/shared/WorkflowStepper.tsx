@@ -34,7 +34,7 @@ export function WorkflowStepper({ title, subtitle, steps, currentIndex, delayMs 
                   className={cn(
                     'flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold',
                     isDone && 'border-success-500 bg-success-500 text-white',
-                    isCurrent && 'border-cyan-500 bg-cyan-50 text-cyan-700',
+                    isCurrent && 'animate-currentStep border-cyan-500 bg-cyan-50 text-cyan-700',
                     !isDone && !isCurrent && 'border-ink-200 bg-surface text-ink-400',
                   )}
                 >

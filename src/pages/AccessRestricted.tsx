@@ -15,7 +15,7 @@ export function AccessRestricted() {
       </span>
       <h2 className="mt-5 text-lg font-bold text-ink-900">Access Restricted</h2>
       <p className="mt-2 max-w-sm text-sm text-ink-500">
-        You do not have permission to access this page. This area is restricted to specific WEIGHPRO roles.
+        You do not have permission to access this page. This area is restricted to specific WeighMetric roles.
       </p>
       <Link
         to="/"

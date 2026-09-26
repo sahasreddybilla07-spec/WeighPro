@@ -3,10 +3,13 @@ import { WorkflowStepper } from '../../components/dashboard/shared/WorkflowStepp
 import { QuickActionsCard } from '../../components/dashboard/shared/QuickActionsCard'
 import type { QuickAction } from '../../components/dashboard/shared/QuickActionsCard'
 import { SectionHeading } from '../../components/dashboard/shared/SectionHeading'
+import { DashboardHero } from '../../components/dashboard/shared/DashboardHero'
 import { MyEvaluationsTable } from '../../components/dashboard/tester/MyEvaluationsTable'
 import { TesterNotificationsCard } from '../../components/dashboard/tester/TesterNotificationsCard'
 import { MetricCard } from '../../components/ui/MetricCard'
-import { testerMetrics, testingWorkflowCurrentIndex, testingWorkflowSteps } from '../../data/mockData'
+import { testingWorkflowSteps } from '../../data/mockData'
+import { useAppData } from '../../context/AppDataContext'
+import { useAuth } from '../../auth/AuthContext'
 
 const QUICK_ACTIONS: QuickAction[] = [
   { label: 'Start Evaluation', description: 'Begin testing an assigned evaluation', icon: FlaskConical, to: '/testing' },
@@ -15,8 +18,20 @@ const QUICK_ACTIONS: QuickAction[] = [
 ]
 
 export function TesterDashboard() {
+  const { data } = useAppData()
+  const { user } = useAuth()
+  const assigned = data.evaluations.filter((row) => row.tester === user?.name)
+  const inProgress = assigned.find((row) => row.status === 'Testing')
+  const testerMetrics = {
+    assigned: assigned.filter((row) => row.status === 'Assigned').length,
+    inProgress: assigned.filter((row) => row.status === 'Testing').length,
+    pendingSubmission: assigned.filter((row) => row.status === 'Draft' || row.status === 'Submitted').length,
+    completed: assigned.filter((row) => row.status === 'Approved' || row.status === 'Completed').length,
+  }
+  const workflowIndex = inProgress ? Math.min(inProgress.testsCompleted, testingWorkflowSteps.length - 1) : 0
   return (
     <div className="space-y-8">
+      <DashboardHero />
       {/* Primary work: what you're assigned and what's currently in progress */}
       <div>
         <SectionHeading eyebrow="Your Work" title="Testing Queue" subtitle="Evaluations assigned to you, in progress or awaiting action" />
@@ -24,9 +39,9 @@ export function TesterDashboard() {
           <MyEvaluationsTable />
           <WorkflowStepper
             title="Current Testing Progress"
-            subtitle="EV-2026-0138 · Precision Balance Combics CIS1"
+            subtitle={inProgress ? `${inProgress.id} · ${inProgress.instrumentType} ${inProgress.model}` : 'No evaluation is currently in progress'}
             steps={testingWorkflowSteps}
-            currentIndex={testingWorkflowCurrentIndex}
+            currentIndex={workflowIndex}
             delayMs={0.24}
           />
         </div>

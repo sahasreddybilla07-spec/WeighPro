@@ -1,12 +1,15 @@
 import { Download, Eye, Search } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { reportsList } from '../data/mockData'
+import { useAppData } from '../context/AppDataContext'
+import { getReports } from '../lib/dataSelectors'
 import { SelectInput } from '../components/ui/FormSection'
 import { StatusBadge } from '../components/ui/StatusBadge'
 import { TableCard } from '../components/dashboard/shared/TableCard'
 
 export function ReportsRepository() {
+  const { data } = useAppData()
+  const reportsList = getReports(data)
   const [query, setQuery] = useState('')
   const [result, setResult] = useState('All Results')
 
@@ -20,7 +23,7 @@ export function ReportsRepository() {
           r.instrument.toLowerCase().includes(query.toLowerCase()) ||
           r.serial.toLowerCase().includes(query.toLowerCase()),
       )
-  }, [query, result])
+  }, [reportsList, query, result])
 
   return (
     <div className="space-y-5">
@@ -45,7 +48,7 @@ export function ReportsRepository() {
         <table className="w-full min-w-[900px] border-collapse text-left">
           <thead>
             <tr className="bg-ink-50">
-              {['Report ID', 'Instrument', 'Serial', 'Evaluation', 'Date', 'Result', 'Legal Reviewer', 'Status', ''].map((col) => (
+              {['Report ID', 'Instrument', 'Serial', 'Evaluation', 'Date', 'Result', 'Legal Reviewer', 'Status'].map((col) => (
                 <th key={col} className="whitespace-nowrap px-5 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-ink-400">
                   {col}
                 </th>
@@ -55,7 +58,17 @@ export function ReportsRepository() {
           <tbody className="divide-y divide-ink-100">
             {rows.map((r) => (
               <tr key={r.reportId} className="transition-colors hover:bg-ink-50/70">
-                <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs font-medium text-ink-900">{r.reportId}</td>
+                <td className="whitespace-nowrap px-5 py-3.5">
+                  <div className="font-mono text-xs font-medium text-ink-900">{r.reportId}</div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <Link to={`/reports/${r.evaluationId}`} className="inline-flex items-center gap-1 text-xs font-semibold text-brand-700 hover:text-brand-900" title="Preview report">
+                      <Eye className="h-3.5 w-3.5" />Preview
+                    </Link>
+                    <Link to={`/reports/${r.evaluationId}?download=1`} className="inline-flex items-center gap-1 text-xs font-semibold text-ink-600 hover:text-ink-900" title="Download PDF">
+                      <Download className="h-3.5 w-3.5" />Download
+                    </Link>
+                  </div>
+                </td>
                 <td className="whitespace-nowrap px-5 py-3.5 text-sm text-ink-700">{r.instrument}</td>
                 <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs text-ink-500">{r.serial}</td>
                 <td className="whitespace-nowrap px-5 py-3.5 font-mono text-xs text-ink-500">{r.evaluationId}</td>
@@ -66,16 +79,6 @@ export function ReportsRepository() {
                 <td className="whitespace-nowrap px-5 py-3.5 text-sm text-ink-700">{r.reviewer}</td>
                 <td className="whitespace-nowrap px-5 py-3.5">
                   <StatusBadge status={r.status} />
-                </td>
-                <td className="whitespace-nowrap px-5 py-3.5">
-                  <div className="flex justify-end gap-1">
-                    <Link to={`/reports/${r.evaluationId}`} className="rounded-lg p-1.5 text-ink-400 hover:bg-ink-100 hover:text-ink-700" title="View">
-                      <Eye className="h-4 w-4" />
-                    </Link>
-                    <Link to={`/reports/${r.evaluationId}`} className="rounded-lg p-1.5 text-ink-400 hover:bg-ink-100 hover:text-ink-700" title="Download">
-                      <Download className="h-4 w-4" />
-                    </Link>
-                  </div>
                 </td>
               </tr>
             ))}

@@ -1,14 +1,13 @@
 import { motion } from 'framer-motion'
 import { ClipboardList, ShieldCheck, UserCog, Users } from 'lucide-react'
-import { userOverview } from '../../../data/mockData'
+interface UserOverviewCardProps { users: number; testers: number; reviewers: number; labManagers: number }
 
-const ROWS = [
-  { label: 'Testing Technicians', value: userOverview.testers, icon: ClipboardList },
-  { label: 'Legal Reviewers', value: userOverview.reviewers, icon: ShieldCheck },
-  { label: 'Lab Managers', value: userOverview.labManagers, icon: UserCog },
-]
-
-export function UserOverviewCard() {
+export function UserOverviewCard({ users, testers, reviewers, labManagers }: UserOverviewCardProps) {
+  const rows = [
+    { label: 'Testing Technicians', value: testers, icon: ClipboardList },
+    { label: 'Legal Reviewers', value: reviewers, icon: ShieldCheck },
+    { label: 'Lab Managers', value: labManagers, icon: UserCog },
+  ]
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -20,11 +19,11 @@ export function UserOverviewCard() {
         <Users className="h-4 w-4 text-brand-600" strokeWidth={2} />
         <h3 className="text-sm font-semibold text-ink-900">User Overview</h3>
       </div>
-      <p className="mt-1 font-mono text-2xl font-semibold tabular-nums text-ink-900">{userOverview.activeUsers}</p>
+      <p className="mt-1 font-mono text-2xl font-semibold tabular-nums text-ink-900">{users}</p>
       <p className="text-xs text-ink-400">Active users across the platform</p>
 
       <ul className="mt-4 divide-y divide-ink-100 border-t border-ink-100">
-        {ROWS.map((row) => (
+        {rows.map((row) => (
           <li key={row.label} className="flex items-center justify-between py-2.5">
             <span className="flex items-center gap-2 text-sm text-ink-600">
               <row.icon className="h-4 w-4 text-ink-400" strokeWidth={2} />

@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { allEvaluations } from '../../data/mockData'
+import { useAppData } from '../../context/AppDataContext'
+import { useAuth } from '../../auth/AuthContext'
 import { Tabs } from '../../components/ui/Tabs'
 import { StatusBadge } from '../../components/ui/StatusBadge'
 import { WeighingPerformanceTab } from './tabs/WeighingPerformanceTab'
@@ -8,19 +9,31 @@ import { EccentricLoadingTab } from './tabs/EccentricLoadingTab'
 import { OtherTestsTab } from './tabs/OtherTestsTab'
 import { ResultsTab } from './tabs/ResultsTab'
 import { SummaryTab } from './tabs/SummaryTab'
+import { useSearchParams } from 'react-router-dom'
 
 const TABS = [
   { key: 'weighing', label: 'Weighing Performance' },
   { key: 'repeatability', label: 'Repeatability' },
   { key: 'eccentric', label: 'Eccentric Loading' },
-  { key: 'other', label: 'Other Tests' },
+  { key: 'discrimination', label: 'Discrimination' },
+  { key: 'tare', label: 'Tare Balance' },
+  { key: 'temperature', label: 'Temperature Variation' },
   { key: 'results', label: 'Results' },
   { key: 'summary', label: 'Summary' },
 ]
 
 export function TestingWorkspace() {
   const [tab, setTab] = useState('weighing')
-  const evaluation = allEvaluations.find((e) => e.id === 'EV-2026-0138')!
+  const { data } = useAppData()
+  const { user } = useAuth()
+  const [searchParams] = useSearchParams()
+  const requestedId = searchParams.get('evaluation')
+  const evaluation = data.evaluations.find((row) => row.id === requestedId)
+    ?? data.evaluations.find((row) => row.tester === user?.name && row.status === 'Testing')
+    ?? data.evaluations.find((row) => row.tester === user?.name && row.status === 'Assigned')
+    ?? data.evaluations.find((row) => row.status === 'Testing')
+
+  if (!evaluation) return <div className="rounded-xl border border-ink-200 bg-surface p-8 text-center text-sm text-ink-500">There are no evaluations available for testing. Ask a lab manager to assign one.</div>
 
   return (
     <div className="space-y-5">
@@ -49,12 +62,14 @@ export function TestingWorkspace() {
       <div className="rounded-2xl border border-ink-200 bg-surface shadow-card">
         <Tabs tabs={TABS} active={tab} onChange={setTab} />
         <div className="p-5">
-          {tab === 'weighing' && <WeighingPerformanceTab />}
-          {tab === 'repeatability' && <RepeatabilityTab />}
-          {tab === 'eccentric' && <EccentricLoadingTab />}
-          {tab === 'other' && <OtherTestsTab />}
-          {tab === 'results' && <ResultsTab />}
-          {tab === 'summary' && <SummaryTab />}
+          {tab === 'weighing' && <WeighingPerformanceTab evaluationId={evaluation.id} onContinue={() => setTab('repeatability')} />}
+          {tab === 'repeatability' && <RepeatabilityTab evaluationId={evaluation.id} onContinue={() => setTab('eccentric')} />}
+          {tab === 'eccentric' && <EccentricLoadingTab evaluationId={evaluation.id} onContinue={() => setTab('discrimination')} />}
+          {tab === 'discrimination' && <OtherTestsTab evaluationId={evaluation.id} testName="Discrimination Test" onContinue={() => setTab('tare')} />}
+          {tab === 'tare' && <OtherTestsTab evaluationId={evaluation.id} testName="Tare Balance Effect" onContinue={() => setTab('temperature')} />}
+          {tab === 'temperature' && <OtherTestsTab evaluationId={evaluation.id} testName="Temperature Variation" onContinue={() => setTab('results')} />}
+          {tab === 'results' && <ResultsTab evaluationId={evaluation.id} />}
+          {tab === 'summary' && <SummaryTab evaluationId={evaluation.id} />}
         </div>
       </div>
     </div>

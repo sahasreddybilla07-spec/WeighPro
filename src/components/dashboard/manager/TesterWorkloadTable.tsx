@@ -1,7 +1,14 @@
-import { testerWorkload } from '../../../data/mockData'
+import { useAuth } from '../../../auth/AuthContext'
+import { useAppData } from '../../../context/AppDataContext'
+import { getWorkload } from '../../../lib/dataSelectors'
 import { TableCard } from '../shared/TableCard'
 
-export function TesterWorkloadTable() {
+interface TesterWorkloadTableProps { rows?: ReturnType<typeof getWorkload> }
+
+export function TesterWorkloadTable({ rows: suppliedRows }: TesterWorkloadTableProps) {
+  const { data } = useAppData()
+  const { user } = useAuth()
+  const rows = suppliedRows ?? getWorkload(data, user?.role === 'manager' ? user.laboratory : undefined)
   return (
     <TableCard title="Testing Technician Workload" subtitle="Current assignment load across the testing team" delayMs={0.26}>
       <table className="w-full min-w-[440px] border-collapse text-left">
@@ -15,7 +22,7 @@ export function TesterWorkloadTable() {
           </tr>
         </thead>
         <tbody className="divide-y divide-ink-100">
-          {testerWorkload.map((row) => (
+          {rows.map((row) => (
             <tr key={row.tester} className="transition-colors hover:bg-ink-50/70">
               <td className="whitespace-nowrap px-5 py-3.5 text-sm font-medium text-ink-800">{row.tester}</td>
               <td className="px-5 py-3.5 font-mono text-sm tabular-nums text-ink-700">{row.assigned}</td>

@@ -1,43 +1,46 @@
 import { FlaskConical } from 'lucide-react'
-import { oimlRuleCategories, otherTestCategories } from '../../../data/mockData'
+import { useState } from 'react'
+import { getEvaluationMeasurements, useAppData } from '../../../context/AppDataContext'
 import { Button } from '../../../components/ui/Button'
+import { SelectInput, TextArea } from '../../../components/ui/FormSection'
 import { StatusBadge } from '../../../components/ui/StatusBadge'
 
-// "Discrimination Test" in otherTestCategories matches the "Discrimination"
-// category in oimlRuleCategories, etc. — strip the trailing " Test" to line
-// the two lists up without hardcoding a separate mapping.
-function matchingRule(testName: string) {
-  const category = testName.replace(/ Test$/, '')
-  return oimlRuleCategories.find((r) => r.category === category)
-}
+interface OtherTestsTabProps { evaluationId: string; testName: string; onContinue: () => void }
 
-export function OtherTestsTab() {
+export function OtherTestsTab({ evaluationId, testName, onContinue }: OtherTestsTabProps) {
+  const { data, saveMeasurements, updateEvaluation } = useAppData()
+  const measurements = getEvaluationMeasurements(data, evaluationId)
+  const initial = measurements.other.find((row) => row.name === testName)
+    ?? { name: testName, status: 'Not Started' as const, note: '' }
+  const rule = data.rules.find((item) => testName.toLowerCase().includes(item.category.toLowerCase()))
+  const [test, setTest] = useState(initial)
+
+  function update(changes: Partial<typeof test>) {
+    const updated = { ...test, ...changes }
+    setTest(updated)
+    saveMeasurements(evaluationId, { other: measurements.other.map((row) => row.name === testName ? updated : row) })
+  }
+
+  function continueToNext() {
+    updateEvaluation(evaluationId, { status: 'Testing' })
+    onContinue()
+  }
+
   return (
-    <div className="space-y-4">
-      <p className="text-sm text-ink-500">
-        Additional OIML R-76 tests applicable to this instrument class. Detailed test procedures and calculations for
-        these categories will be enabled in a future release.
-      </p>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {otherTestCategories.map((test) => {
-          const rule = matchingRule(test.name)
-          return (
-            <div key={test.name} className="flex flex-col rounded-xl border border-ink-200 bg-surface p-5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-ink-50 text-ink-500">
-                <FlaskConical className="h-4 w-4" strokeWidth={2} />
-              </span>
-              <p className="mt-3 text-sm font-semibold text-ink-900">{test.name}</p>
-              {rule && <p className="mt-1 flex-1 text-xs text-ink-500">{rule.description}</p>}
-              <div className="mt-2">
-                <StatusBadge status={test.status} />
-              </div>
-              <Button variant="secondary" disabled className="mt-4 w-full">
-                Not Yet Available
-              </Button>
-            </div>
-          )
-        })}
+    <div className="max-w-3xl space-y-5">
+      <div className="flex items-start gap-4 rounded-lg border border-ink-200 bg-surface p-5">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700"><FlaskConical className="h-5 w-5" /></span>
+        <div><h3 className="text-base font-semibold text-ink-900">{test.name}</h3><p className="mt-1 text-sm text-ink-500">{rule?.description ?? 'Record the method, observed result, and applicable compliance outcome.'}</p></div>
       </div>
+      <label className="block text-sm font-medium text-ink-700">Outcome
+        <SelectInput className="mt-1" value={test.status} onChange={(event) => update({ status: event.target.value as typeof test.status })}>
+          <option>Not Started</option><option>PASS</option><option>FAIL</option>
+        </SelectInput>
+      </label>
+      <label className="block text-sm font-medium text-ink-700">Observation
+        <TextArea className="mt-1" rows={5} value={test.note} onChange={(event) => update({ note: event.target.value })} placeholder="Record the test method and observed result" />
+      </label>
+      <div className="flex items-center justify-between"><StatusBadge status={test.status === 'Not Started' ? 'NOT TESTED' : test.status} /><Button onClick={continueToNext}>Save &amp; Continue</Button></div>
     </div>
   )
 }

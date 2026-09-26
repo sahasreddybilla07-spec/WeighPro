@@ -71,16 +71,14 @@ export function Login() {
 
           <div
             className="rounded-2xl border border-ink-200 bg-surface p-7 shadow-card sm:p-8"
-            style={{
-              boxShadow: theme === 'dark' ? '0 0 60px -18px rgba(63, 217, 232, 0.35)' : '0 0 40px -20px rgba(22, 166, 182, 0.25)',
-            }}
+            style={{ boxShadow: theme === 'dark' ? '0 12px 32px -20px rgba(0, 0, 0, 0.7)' : undefined }}
           >
             <div className="flex items-center gap-3">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cyan-50 text-cyan-600">
                 <UserRound className="h-5 w-5" strokeWidth={2} />
               </span>
               <h1 className="text-xl font-bold text-ink-900">
-                Sign in to <span className="text-cyan-600">WeighPro</span>
+                Sign in to <span className="text-cyan-600">WeighMetric</span>
               </h1>
             </div>
             <p className="mt-3 text-sm text-ink-500">Enter your credentials to access your dashboard.</p>
@@ -142,7 +140,7 @@ export function Login() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-700 to-cyan-500 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-700 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-800 disabled:opacity-60"
               >
                 Sign In
                 <ArrowRight className="h-4 w-4" />

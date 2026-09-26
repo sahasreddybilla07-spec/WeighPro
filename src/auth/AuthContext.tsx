@@ -19,7 +19,7 @@ interface AuthContextValue {
   logout: () => void
 }
 
-const STORAGE_KEY = 'weighpro.session'
+const STORAGE_KEY = 'weighmetric.session'
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 

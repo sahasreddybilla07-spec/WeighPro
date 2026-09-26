@@ -1,6 +1,7 @@
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { pendingReviewQueue } from '../../../data/mockData'
+import { useAuth } from '../../../auth/AuthContext'
+import { useAppData } from '../../../context/AppDataContext'
 import { StatusBadge } from '../../ui/StatusBadge'
 import { TableCard } from './TableCard'
 
@@ -13,7 +14,13 @@ interface PendingReviewTableProps {
 }
 
 export function PendingReviewTable({ title, subtitle, limit, viewAllTo, delayMs = 0.2 }: PendingReviewTableProps) {
-  const rows = limit ? pendingReviewQueue.slice(0, limit) : pendingReviewQueue
+  const { data } = useAppData()
+  const { user } = useAuth()
+  const pending = data.evaluations
+    .filter((row) => row.status === 'Under Review')
+    .filter((row) => !user || user.role === 'admin' || (user.role === 'manager' ? row.lab === user.laboratory : row.reviewer === user.name))
+    .map((row) => ({ evaluationId: row.id, instrument: `${row.instrumentType} · ${row.model}`, tester: row.tester, submitted: row.submittedDate ?? row.createdDate, result: row.result === 'FAIL' ? 'FAIL' as const : 'PASS' as const }))
+  const rows = limit ? pending.slice(0, limit) : pending
 
   return (
     <TableCard
@@ -60,6 +67,7 @@ export function PendingReviewTable({ title, subtitle, limit, viewAllTo, delayMs 
               </td>
             </tr>
           ))}
+          {rows.length === 0 && <tr><td colSpan={6} className="px-5 py-10 text-center text-sm text-ink-500">No evaluations are waiting for review.</td></tr>}
         </tbody>
       </table>
     </TableCard>

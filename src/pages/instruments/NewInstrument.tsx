@@ -1,9 +1,11 @@
 import { UploadCloud } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAppData } from '../../context/AppDataContext'
 import { Button } from '../../components/ui/Button'
 import { Field, FormSection, SelectInput, TextInput } from '../../components/ui/FormSection'
 import { WorkflowStepper } from '../../components/dashboard/shared/WorkflowStepper'
+import { localDateString } from '../../lib/utils'
 
 const STEPS = ['Manufacturer', 'Instrument Details', 'Technical Specifications', 'Location & Ownership', 'Documents', 'Review & Confirm']
 
@@ -74,8 +76,10 @@ const REVIEW_ROWS: [string, keyof InstrumentDraft][] = [
 
 export function NewInstrument() {
   const navigate = useNavigate()
+  const { addInstrument } = useAppData()
   const [step, setStep] = useState(0)
   const [draft, setDraft] = useState<InstrumentDraft>(INITIAL_DRAFT)
+  const [files, setFiles] = useState<File[]>([])
 
   const isLast = step === STEPS.length - 1
   const canAdvance = REQUIRED_FIELDS[step].every((key) => draft[key].trim() !== '')
@@ -86,6 +90,22 @@ export function NewInstrument() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    addInstrument({
+      serial: draft.serialNumber.trim(),
+      manufacturer: draft.manufacturerName.trim(),
+      manufacturerAddress: draft.manufacturerAddress.trim(),
+      model: draft.model.trim(),
+      type: draft.instrumentType,
+      status: 'Active',
+      capacity: draft.capacity.trim(),
+      scaleInterval: draft.scaleInterval.trim(),
+      accuracyClass: draft.accuracyClass,
+      location: draft.location.trim() || 'Not specified',
+      lab: draft.laboratory,
+      owner: draft.owner.trim() || 'Not specified',
+      registrationDate: draft.registrationDate || localDateString(),
+      documents: files.map((file) => file.name),
+    })
     navigate('/instruments')
   }
 
@@ -181,8 +201,9 @@ export function NewInstrument() {
           <div className="sm:col-span-2">
             <div className="flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-ink-200 bg-ink-50 px-6 py-8 text-center">
               <UploadCloud className="h-6 w-6 text-ink-400" />
-              <p className="text-sm font-medium text-ink-700">Drag files here, or click to browse</p>
-              <p className="text-xs text-ink-400">Instrument photos, manufacturer certificates (PDF, JPG, PNG)</p>
+              <label className="cursor-pointer text-sm font-medium text-ink-700">Choose supporting documents<input className="sr-only" type="file" multiple accept=".pdf,.jpg,.jpeg,.png" onChange={(event) => setFiles((current) => [...current, ...Array.from(event.target.files ?? [])])} /></label>
+              <p className="text-xs text-ink-400">Instrument photos and manufacturer certificates (PDF, JPG, PNG)</p>
+              {files.length > 0 && <ul className="mt-2 space-y-1 text-xs text-ink-600">{files.map((file, index) => <li key={`${file.name}-${index}`}>{file.name} · {(file.size / 1024).toFixed(0)} KB</li>)}</ul>}
             </div>
           </div>
         </FormSection>

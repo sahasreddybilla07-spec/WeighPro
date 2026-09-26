@@ -1,4 +1,4 @@
-import logoMark from '../../assets/logo-mark.png'
+import logoMark from '../../assets/final-logo.jpg'
 import { cn } from '../../lib/utils'
 
 interface BrandLockupProps {
@@ -20,7 +20,7 @@ export function BrandLockup({ size = 'md', className, markClassName, light = fal
     <div className={cn('flex items-center gap-2.5', className)}>
       <img src={logoMark} alt="" className={cn(dims.mark, 'w-auto shrink-0 object-contain', markClassName)} />
       <span className={cn('font-bold tracking-tight', dims.text, light ? 'text-white' : 'text-brand-700')}>
-        Weigh<span className={light ? 'text-cyan-300' : 'text-cyan-600'}>Pro</span>
+        Weigh<span className={light ? 'text-cyan-300' : 'text-cyan-600'}>Metric</span>
       </span>
     </div>
   )
