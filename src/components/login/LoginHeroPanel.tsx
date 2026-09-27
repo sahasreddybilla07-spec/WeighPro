@@ -25,26 +25,9 @@ export function LoginHeroPanel() {
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden">
-      {/* Restrained instrument panel with a subtle technical grid. */}
-      <div
-        className="absolute inset-0 transition-colors duration-300"
-        style={{
-          background: 'linear-gradient(155deg, #17434a 0%, #10343d 100%)',
-        }}
-      />
-
-      <svg className="absolute inset-0 h-full w-full opacity-[0.06]" preserveAspectRatio="none" aria-hidden="true">
-        <defs>
-          <pattern id="loginCalGrid" width="32" height="32" patternUnits="userSpaceOnUse">
-            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#8edfd0" strokeWidth="1" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#loginCalGrid)" />
-      </svg>
-
+    <div className="login-hero relative min-h-[520px] w-full overflow-hidden lg:min-h-screen">
       {/* Foreground content */}
-      <div className="relative z-10 flex h-full flex-col justify-between px-10 py-12 text-white">
+      <div className="relative z-10 flex min-h-[520px] flex-col justify-around gap-8 px-6 py-9 text-white sm:px-10 lg:min-h-screen lg:justify-between lg:px-10 lg:py-12 xl:px-14">
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
           <BrandLockup size="lg" light />
           <p className="mt-4 max-w-[280px] text-sm font-semibold leading-snug tracking-wide text-white/90">

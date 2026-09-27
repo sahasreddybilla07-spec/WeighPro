@@ -2,6 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
+.login-shell {
+  isolation: isolate;
+  background: linear-gradient(128deg, #08272f 0%, #0b3038 48%, #09272f 100%);
+}
+.login-shell::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: '';
+  background-image: linear-gradient(rgba(148, 226, 211, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 226, 211, .045) 1px, transparent 1px);
+  background-size: 42px 42px;
+  pointer-events: none;
+}
+.login-hero-art {
+  /* Let the artwork emerge from the login backdrop instead of reading as a tile. */
+  -webkit-mask-image: radial-gradient(ellipse 76% 72% at 50% 51%, #000 52%, rgba(0, 0, 0, .92) 66%, rgba(0, 0, 0, .48) 84%, transparent 100%);
+  mask-image: radial-gradient(ellipse 76% 72% at 50% 51%, #000 52%, rgba(0, 0, 0, .92) 66%, rgba(0, 0, 0, .48) 84%, transparent 100%);
+  /* Lighten removes the image's darker teal cast while keeping its instruments crisp. */
+  mix-blend-mode: lighten;
+}
+.login-card {
+  border-color: rgba(170, 230, 219, .17);
+  background: linear-gradient(145deg, rgba(17, 57, 64, .86), rgba(9, 39, 47, .82));
+  box-shadow: 0 28px 80px rgba(0, 12, 17, .34), 0 0 48px rgba(63, 185, 162, .08);
+  backdrop-filter: blur(20px);
+}
+.login-icon-tile {
+  color: #a4f0df;
+  border: 1px solid rgba(113, 220, 200, .2);
+  background: rgba(70, 181, 159, .13);
+}
+.login-label { color: rgba(227, 244, 240, .72); }
+.login-field {
+  --login-field-surface: #0b3038;
+  color: rgba(220, 244, 239, .5);
+  border-color: rgba(173, 222, 214, .17);
+  background-color: var(--login-field-surface);
+  background-image: none;
+}
+.login-field:focus-within {
+  color: #81e6d0;
+  border-color: rgba(94, 224, 196, .75);
+  box-shadow: 0 0 0 3px rgba(66, 196, 169, .12);
+}
+.login-field-input,
+.login-field-input:hover,
+.login-field-input:focus {
+  background-color: var(--login-field-surface);
+  background-image: none;
+}
+.login-field input:-webkit-autofill,
+.login-field input:-webkit-autofill:hover,
+.login-field input:-webkit-autofill:focus,
+.login-field input:-webkit-autofill:active {
+  -webkit-text-fill-color: rgba(255, 255, 255, .92);
+  -webkit-box-shadow: 0 0 0 1000px var(--login-field-surface) inset;
+  box-shadow: 0 0 0 1000px var(--login-field-surface) inset;
+  background-color: var(--login-field-surface) !important;
+  background-image: none !important;
+  caret-color: #fff;
+}
+.login-password-toggle { color: rgba(220, 244, 239, .48); }
+.login-password-toggle:hover { color: #a4f0df; }
+.login-submit {
+  background: linear-gradient(100deg, #159b82, #35b99b);
+  box-shadow: 0 9px 24px rgba(20, 166, 137, .2);
+}
+.login-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: linear-gradient(100deg, #1bad90, #49c8aa);
+  box-shadow: 0 12px 28px rgba(20, 166, 137, .3);
+}
+.login-demo {
+  border-color: rgba(173, 222, 214, .13);
+  background: rgba(3, 27, 34, .25);
+}
+.login-demo-account {
+  border-color: rgba(173, 222, 214, .13);
+  background: rgba(255, 255, 255, .035);
+}
+.login-demo-account:hover {
+  transform: translateY(-1px);
+  border-color: rgba(94, 224, 196, .5);
+  background: rgba(54, 172, 150, .1);
+}
+.login-demo-icon {
+  color: #9cebd9;
+  background: rgba(70, 181, 159, .12);
+}
+.login-error {
+  color: #ffd5d2;
+  border-color: rgba(255, 134, 125, .28);
+  background: rgba(139, 47, 47, .2);
+}
+
 .report-document { position: relative; margin: 0 auto; max-width: 960px; padding: 28px; color: #263442; background: #fff; border: 1px solid #d8dee3; font-size: 10px; }
 .report-brand { display: flex; flex-direction: column; gap: 5px; padding: 14px 18px; color: #fff; background: #111d2b; }
 .report-brand strong { font-size: 14px; }
